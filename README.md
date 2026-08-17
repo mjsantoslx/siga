@@ -1,4 +1,6 @@
-# SIGA MVC v2
+# SIGA — Sistema de Gestão de Associados
+
+**Versão: 5.0**
 
 Versão inicial funcional da aplicação SIGA baseada no schema `siga(1).sql`.
 
@@ -84,3 +86,20 @@ O pacote inclui os dois scripts necessários para a base de dados:
 - `database/update_v3_to_v4.sql` — actualização de uma instalação SIGA v3 para v4.
 
 O script de actualização não elimina dados existentes.
+
+## Backoffice de tabelas de apoio — v5
+
+Disponível apenas para Administradores em **Tabelas de apoio**.
+
+Tabelas geridas:
+- Géneros (`generos`)
+- Nacionalidades (`nacionalidades`)
+- Tipos de contacto (`tipos_contacto`)
+- Tipos de evento (`tipos_evento`)
+- Tipos de parentesco (`tipos_parentesco`)
+
+Inclui criação, edição e eliminação, com proteção CSRF e tratamento de erros de Foreign Key. A aplicação não permite que utilizadores regulares acedam ao backoffice.
+
+Scripts:
+- `database/siga_v5.sql` — criação de raiz.
+- `database/update_v4_to_v5.sql` — atualização da v4 para v5. A v5 não altera o esquema da BD.

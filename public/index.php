@@ -7,7 +7,8 @@ use App\Controllers\{
     DashboardController,
     AssociadosController,
     CompanyController,
-    UtilizadoresController
+    UtilizadoresController,
+    LookupController
 };
 
 require dirname(__DIR__) . '/vendor/autoload.php';
@@ -28,6 +29,7 @@ $dashboard = new DashboardController($config);
 $associados = new AssociadosController($config);
 $companhias = new CompanyController($config);
 $utilizadores = new UtilizadoresController($config);
+$lookup = new LookupController($config);
 
 if ($method === 'GET' && ($uri === '/' || $uri === '/login')) { $auth->login(); exit; }
 if ($method === 'POST' && $uri === '/login') { $auth->authenticate(); exit; }
@@ -82,6 +84,23 @@ if (preg_match('#^/utilizadores/(\d+)/associado$#', $uri, $m) && $method === 'PO
 }
 if (preg_match('#^/utilizadores/(\d+)$#', $uri, $m) && $method === 'GET') {
     $utilizadores->show((int)$m[1]);
+    exit;
+}
+
+
+if ($method === 'GET' && $uri === '/tabelas') { $lookup->index(); exit; }
+if (preg_match('#^/tabelas/([a-z_]+)/novo$#', $uri, $m)) {
+    if ($method === 'GET') $lookup->create($m[1]);
+    elseif ($method === 'POST') $lookup->store($m[1]);
+    exit;
+}
+if (preg_match('#^/tabelas/([a-z_]+)/(\d+)/editar$#', $uri, $m)) {
+    if ($method === 'GET') $lookup->edit($m[1], (int)$m[2]);
+    elseif ($method === 'POST') $lookup->update($m[1], (int)$m[2]);
+    exit;
+}
+if (preg_match('#^/tabelas/([a-z_]+)/(\d+)/eliminar$#', $uri, $m) && $method === 'POST') {
+    $lookup->delete($m[1], (int)$m[2]);
     exit;
 }
 

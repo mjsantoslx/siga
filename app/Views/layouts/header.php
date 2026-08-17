@@ -21,7 +21,7 @@ if (!empty($user['id'])) {
     } catch (\Throwable $e) {}
 }
 ?>
-<?php if ($isAdmin): ?><a href="<?= e($config['app']['base_url']) ?>/companhias">Companhias</a><a href="<?= e($config['app']['base_url']) ?>/utilizadores">Utilizadores</a><?php endif; ?>
+<?php if ($isAdmin): ?><a href="<?= e($config['app']['base_url']) ?>/companhias">Companhias</a><a href="<?= e($config['app']['base_url']) ?>/utilizadores">Utilizadores</a><a href="<?= e($config['app']['base_url']) ?>/tabelas">Tabelas de apoio</a><?php endif; ?>
 <a href="<?= e($config['app']['base_url']) ?>/logout">Sair</a>
 </nav>
 </header>
