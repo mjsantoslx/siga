@@ -103,3 +103,15 @@ Inclui criação, edição e eliminação, com proteção CSRF e tratamento de e
 Scripts:
 - `database/siga_v5.sql` — criação de raiz.
 - `database/update_v4_to_v5.sql` — atualização da v4 para v5. A v5 não altera o esquema da BD.
+
+
+## Política de palavras-passe
+
+A aplicação não impõe requisitos de complexidade à palavra-passe.
+
+A única regra é:
+- mínimo de **5 caracteres**;
+- podem ser utilizados caracteres alfanuméricos e símbolos;
+- não é exigida combinação específica de maiúsculas, minúsculas, números ou símbolos.
+
+As palavras-passe continuam a ser armazenadas com `password_hash()` e nunca em texto simples.

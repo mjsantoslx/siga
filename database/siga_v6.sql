@@ -1,3 +1,5 @@
+-- SIGA v6 - Criação da base de dados de raiz
+
 /*
  Navicat MySQL Dump SQL
 

@@ -17,7 +17,7 @@ $action = $userRecord
 <input type="email" name="Email" value="<?= e($userRecord['Email'] ?? '') ?>">
 
 <label><?= $userRecord ? 'Nova palavra-passe <small>(deixe vazio para manter a actual)</small>' : 'Palavra-passe' ?></label>
-<input type="password" name="Password" <?= $userRecord ? '' : 'required' ?> minlength="10" autocomplete="new-password">
+<input type="password" name="Password" <?= $userRecord ? '' : 'required' ?> minlength="5" autocomplete="new-password">
 
 <label><input type="checkbox" name="Administrador" value="1" <?= !empty($userRecord['Administrador']) ? 'checked' : '' ?>>
 Administrador</label>

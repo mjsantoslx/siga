@@ -68,8 +68,8 @@ final class UtilizadoresController extends Controller
             $this->redirect('utilizadores/novo');
         }
 
-        if (strlen($password) < 10) {
-            $_SESSION['_error'] = 'A palavra-passe deve ter pelo menos 10 caracteres.';
+        if (mb_strlen($password) < 5) {
+            $_SESSION['_error'] = 'A palavra-passe deve ter pelo menos 5 caracteres.';
             $this->redirect('utilizadores/novo');
         }
 
