@@ -6,7 +6,8 @@ use App\Controllers\{
     AuthController,
     DashboardController,
     AssociadosController,
-    CompanyController
+    CompanyController,
+    UtilizadoresController
 };
 
 require dirname(__DIR__) . '/vendor/autoload.php';
@@ -26,6 +27,7 @@ $auth = new AuthController($config);
 $dashboard = new DashboardController($config);
 $associados = new AssociadosController($config);
 $companhias = new CompanyController($config);
+$utilizadores = new UtilizadoresController($config);
 
 if ($method === 'GET' && ($uri === '/' || $uri === '/login')) { $auth->login(); exit; }
 if ($method === 'POST' && $uri === '/login') { $auth->authenticate(); exit; }
@@ -50,6 +52,36 @@ if (preg_match('#^/associados/(\\d+)/saude$#', $uri, $m)) {
 }
 if (preg_match('#^/associados/(\\d+)$#', $uri, $m)) {
     $associados->show((int)$m[1]);
+    exit;
+}
+
+
+if ($method === 'GET' && $uri === '/utilizadores') { $utilizadores->index(); exit; }
+if ($method === 'GET' && $uri === '/utilizadores/novo') { $utilizadores->create(); exit; }
+if ($method === 'POST' && $uri === '/utilizadores/novo') { $utilizadores->store(); exit; }
+if (preg_match('#^/utilizadores/(\d+)/editar$#', $uri, $m)) {
+    if ($method === 'GET') $utilizadores->edit((int)$m[1]);
+    elseif ($method === 'POST') $utilizadores->update((int)$m[1]);
+    exit;
+}
+if (preg_match('#^/utilizadores/(\d+)/desactivar$#', $uri, $m) && $method === 'POST') {
+    $utilizadores->deactivate((int)$m[1]);
+    exit;
+}
+if (preg_match('#^/utilizadores/(\d+)/companhias$#', $uri, $m) && $method === 'POST') {
+    $utilizadores->addCompany((int)$m[1]);
+    exit;
+}
+if (preg_match('#^/utilizadores/(\d+)/companhias/(\d+)/remover$#', $uri, $m) && $method === 'POST') {
+    $utilizadores->removeCompany((int)$m[1], (int)$m[2]);
+    exit;
+}
+if (preg_match('#^/utilizadores/(\d+)/associado$#', $uri, $m) && $method === 'POST') {
+    $utilizadores->associate((int)$m[1]);
+    exit;
+}
+if (preg_match('#^/utilizadores/(\d+)$#', $uri, $m) && $method === 'GET') {
+    $utilizadores->show((int)$m[1]);
     exit;
 }
 

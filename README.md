@@ -60,3 +60,27 @@ Exemplo:
 É necessário que `mod_rewrite` esteja activo.
 
 Alternativamente, pode-se apontar o `DocumentRoot` directamente para a pasta `public`; nesse caso o `public/.htaccess` trata as rotas.
+
+
+## Gestão de utilizadores
+
+A gestão de utilizadores está disponível apenas para Administradores.
+
+- Criar utilizadores regulares ou Administradores.
+- O email é opcional.
+- O nome do utilizador é único e é o identificador de login.
+- Um utilizador pode existir sem estar ligado a um associado.
+- A ligação utilizador-associado é opcional e só pode ser definida uma vez pela aplicação.
+- Um utilizador pode ter várias companhias.
+- A entrada/saída de companhias fica em histórico através de `utilizadores_companhias`.
+- A gestão de companhias do utilizador permite adicionar e terminar ligações sem apagar o histórico.
+- Um administrador não pode desactivar a própria conta.
+
+## Scripts de base de dados — v4
+
+O pacote inclui os dois scripts necessários para a base de dados:
+
+- `database/siga_v4.sql` — criação completa da base de dados SIGA v4 de raiz.
+- `database/update_v3_to_v4.sql` — actualização de uma instalação SIGA v3 para v4.
+
+O script de actualização não elimina dados existentes.

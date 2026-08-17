@@ -83,3 +83,7 @@ SELECT 'Chefia Nacional', 1
 WHERE NOT EXISTS (SELECT 1 FROM companhias WHERE Designacao='Chefia Nacional');
 
 SET FOREIGN_KEY_CHECKS=1;
+
+ALTER TABLE utilizadores_companhias
+  ADD INDEX uk_uc_utilizador_companhia_actual
+  (IdUtilizador, IdCompanhia, Activo, DataFim);
