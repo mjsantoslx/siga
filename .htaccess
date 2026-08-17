@@ -1,0 +1,12 @@
+RewriteEngine On
+
+# Serve existing files/directories (e.g. public assets through the explicit rule below).
+RewriteRule ^assets/(.*)$ public/assets/$1 [L]
+
+# Never expose the application internals directly.
+RewriteRule ^(?:app|config|database|tools|vendor)(?:/|$) - [F,L]
+
+# Front controller: every application route goes through public/index.php.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ public/index.php [L]
