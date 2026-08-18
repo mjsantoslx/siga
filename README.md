@@ -128,3 +128,5 @@ Cada associado possui um **N.º de Associado** público com exactamente **5 cara
 Exemplos: `00001`, `00002`, `00010`, `00100`.
 
 O identificador é armazenado como `CHAR(5)`, preservando os zeros à esquerda. É único, atribuído automaticamente pela aplicação, independente do `Id` técnico e não é editável pelo utilizador. Os números atribuídos não são reutilizados.
+
+O N.º de Associado é armazenado em `CHAR(5)` e começa em `00001`.

@@ -130,6 +130,7 @@ CREATE TABLE `utilizadores`  (
 DROP TABLE IF EXISTS `associados`;
 CREATE TABLE `associados`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Numero` char(5) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `Nome` varchar(100) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `DNasc` date NOT NULL,
   `IdGenero` int(6) NOT NULL,
