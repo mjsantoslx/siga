@@ -1,4 +1,4 @@
--- SIGA v8 - Criação da base de dados de raiz
+-- SIGA v9 - Criação da base de dados de raiz
 
 -- SIGA v6 - Criação da base de dados de raiz
 
@@ -27,11 +27,11 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `companhias`;
 CREATE TABLE `companhias`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Designacao` varchar(50) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `Designacao` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ambito_global` tinyint(1) NOT NULL DEFAULT 0,
   `Activo` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -40,9 +40,9 @@ CREATE TABLE `companhias`  (
 DROP TABLE IF EXISTS `generos`;
 CREATE TABLE `generos`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Designacao` varchar(150) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `Designacao` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -51,13 +51,13 @@ CREATE TABLE `generos`  (
 DROP TABLE IF EXISTS `moradas`;
 CREATE TABLE `moradas`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Morada` varchar(150) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
-  `Localidade` varchar(50) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `Morada` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Localidade` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `IdConcelho` smallint(6) NULL DEFAULT NULL,
   `IdDistrito` smallint(6) NULL DEFAULT NULL,
-  `CodPostal` char(8) CHARACTER SET latin1 COLLATE latin1_general_ci NULL DEFAULT NULL,
+  `CodPostal` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -66,9 +66,9 @@ CREATE TABLE `moradas`  (
 DROP TABLE IF EXISTS `nacionalidades`;
 CREATE TABLE `nacionalidades`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Nacionalidade` varchar(20) CHARACTER SET latin1 COLLATE latin1_general_ci NULL DEFAULT NULL,
+  `Nacionalidade` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -77,9 +77,9 @@ CREATE TABLE `nacionalidades`  (
 DROP TABLE IF EXISTS `tipos_contacto`;
 CREATE TABLE `tipos_contacto`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Designacao` varchar(25) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `Designacao` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -88,9 +88,9 @@ CREATE TABLE `tipos_contacto`  (
 DROP TABLE IF EXISTS `tipos_evento`;
 CREATE TABLE `tipos_evento`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Designacao` varchar(25) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `Designacao` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -99,9 +99,9 @@ CREATE TABLE `tipos_evento`  (
 DROP TABLE IF EXISTS `tipos_parentesco`;
 CREATE TABLE `tipos_parentesco`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `TipoParentesco` varchar(20) CHARACTER SET latin1 COLLATE latin1_general_ci NULL DEFAULT NULL,
+  `TipoParentesco` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -110,18 +110,18 @@ CREATE TABLE `tipos_parentesco`  (
 DROP TABLE IF EXISTS `utilizadores`;
 CREATE TABLE `utilizadores`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-`Nome` varchar(100) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
-  `Email` varchar(150) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
-  `Password` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+`Nome` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Email` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `Administrador` tinyint(1) NOT NULL DEFAULT 0,
   `Activo` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `uk_utilizadores_nome` (`Nome`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 
--- SIGA v8 - Criação da base de dados de raiz
+-- SIGA v9 - Criação da base de dados de raiz
 
 -- ----------------------------
 -- Table structure for associados
@@ -129,16 +129,16 @@ CREATE TABLE `utilizadores`  (
 DROP TABLE IF EXISTS `associados`;
 CREATE TABLE `associados`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Numero` char(5) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
-  `Nome` varchar(100) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `Numero` char(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Nome` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `DNasc` date NOT NULL,
   `IdGenero` int(6) NOT NULL,
-  `CartaoCidadao` char(8) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
-  `NIF` char(11) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `CartaoCidadao` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `NIF` char(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `IdNacionalidade` int(6) NOT NULL,
-  `Naturalidade` varchar(100) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
-  `Profissao` varchar(50) CHARACTER SET latin1 COLLATE latin1_general_ci NULL DEFAULT NULL,
-  `Habilitacoes` varchar(50) CHARACTER SET latin1 COLLATE latin1_general_ci NULL DEFAULT NULL,
+  `Naturalidade` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Profissao` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `Habilitacoes` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `DataRegisto` date NOT NULL,
   `Activo` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`Id`) USING BTREE,
@@ -147,7 +147,7 @@ CREATE TABLE `associados`  (
   INDEX `fk_associados_nacionalidade_idnacionalidade`(`IdNacionalidade` ASC) USING BTREE,
   CONSTRAINT `fk_associados_nacionalidades_idnacionalidade` FOREIGN KEY (`IdNacionalidade`) REFERENCES `nacionalidades` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_associados_generos` FOREIGN KEY (`IdGenero`) REFERENCES `generos` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -163,7 +163,7 @@ CREATE TABLE `companhias_moradas`  (
   INDEX `fk_companhias_moradas_moradas`(`IdMorada` ASC) USING BTREE,
   CONSTRAINT `fk_companhias_moradas_companhias` FOREIGN KEY (`IdCompanhia`) REFERENCES `companhias` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_companhias_moradas_moradas` FOREIGN KEY (`IdMorada`) REFERENCES `moradas` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -184,7 +184,7 @@ CREATE TABLE `utilizadores_companhias` (
   INDEX `idx_uc_companhia_actual` (`IdCompanhia`,`Activo`,`DataFim`),
   CONSTRAINT `fk_uc_utilizador` FOREIGN KEY (`IdUtilizador`) REFERENCES `utilizadores` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_uc_companhia` FOREIGN KEY (`IdCompanhia`) REFERENCES `companhias` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB CHARACTER SET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB CHARACTER SET=latin1 COLLATE=utf8mb4_unicode_ci;
 
 
 -- ----------------------------
@@ -204,7 +204,7 @@ CREATE TABLE `associados_companhias` (
   INDEX `idx_ac_companhia_actual` (`IdCompanhia`,`Activo`,`DataFim`),
   CONSTRAINT `fk_associados_companhias_associados` FOREIGN KEY (`IdAssociado`) REFERENCES `associados` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_associados_companhias_companhias` FOREIGN KEY (`IdCompanhia`) REFERENCES `companhias` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB CHARACTER SET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB CHARACTER SET=latin1 COLLATE=utf8mb4_unicode_ci;
 
 
 -- ----------------------------
@@ -220,7 +220,7 @@ CREATE TABLE `associados_moradas`  (
   INDEX `fk_associados_moradas_moradas_idmorada`(`IdMorada` ASC) USING BTREE,
   CONSTRAINT `fk_associados_moradas_associados_idassociado` FOREIGN KEY (`IdAssociado`) REFERENCES `associados` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_associados_moradas_moradas_idmorada` FOREIGN KEY (`IdMorada`) REFERENCES `moradas` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -236,7 +236,7 @@ CREATE TABLE `consentimentos`  (
   PRIMARY KEY (`Id`) USING BTREE,
   INDEX `fk_consentimentos_associados_id_associado`(`IdAssociado` ASC) USING BTREE,
   CONSTRAINT `fk_consentimentos_associados_id_associado` FOREIGN KEY (`IdAssociado`) REFERENCES `associados` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -247,13 +247,13 @@ CREATE TABLE `contactos`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `IdTipoContacto` int(11) NOT NULL,
   `IdAssociado` int(11) NOT NULL,
-  `Valor` varchar(100) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `Valor` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   INDEX `fk_contactos_tipos_contacto`(`IdTipoContacto` ASC) USING BTREE,
   INDEX `fk_contactos_associados`(`IdAssociado` ASC) USING BTREE,
   CONSTRAINT `fk_contactos_tipos_contacto` FOREIGN KEY (`IdTipoContacto`) REFERENCES `tipos_contacto` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_contactos_associados` FOREIGN KEY (`IdAssociado`) REFERENCES `associados` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -263,7 +263,7 @@ DROP TABLE IF EXISTS `eventos_associados`;
 CREATE TABLE `eventos_associados`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `IdAssociado` int(6) NOT NULL,
-  `Descricao` text CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `Descricao` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `DataEvento` date NOT NULL,
   `IdTipoEvento` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
@@ -271,7 +271,7 @@ CREATE TABLE `eventos_associados`  (
   INDEX `fk_eventos_associados_tipos_evento`(`IdTipoEvento` ASC) USING BTREE,
   CONSTRAINT `fk_eventos_associados_associados` FOREIGN KEY (`IdAssociado`) REFERENCES `associados` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_eventos_associados_tipos_evento` FOREIGN KEY (`IdTipoEvento`) REFERENCES `tipos_evento` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -281,19 +281,19 @@ DROP TABLE IF EXISTS `fichas_saude`;
 CREATE TABLE `fichas_saude`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `IdAssociado` int(4) NOT NULL,
-  `NumUente` char(9) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `NumUente` char(9) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `Asma` tinyint(1) NOT NULL DEFAULT 0,
   `Epilepsia` tinyint(1) NOT NULL DEFAULT 0,
   `Diabetes` tinyint(1) NOT NULL DEFAULT 0,
   `Alergias` tinyint(1) NOT NULL DEFAULT 0,
-  `DescAlergias` text CHARACTER SET latin1 COLLATE latin1_general_ci NULL DEFAULT NULL,
-  `MedicacaoRegular` text CHARACTER SET latin1 COLLATE latin1_general_ci NULL DEFAULT NULL,
-  `RestricoesAlimentares` text CHARACTER SET latin1 COLLATE latin1_general_ci NULL DEFAULT NULL,
-  `Outros` text CHARACTER SET latin1 COLLATE latin1_general_ci NULL DEFAULT NULL,
+  `DescAlergias` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `MedicacaoRegular` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `RestricoesAlimentares` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `Outros` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   INDEX `fichas_saude_associados_Id_fk`(`IdAssociado` ASC) USING BTREE,
   CONSTRAINT `fichas_saude_associados_Id_fk` FOREIGN KEY (`IdAssociado`) REFERENCES `associados` (`Id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -304,16 +304,16 @@ CREATE TABLE `parentescos`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `IdTipoParentesco` int(11) NOT NULL,
   `IdAssociado` int(11) NOT NULL,
-  `Nome` varchar(100) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
-  `Telefone` varchar(15) CHARACTER SET latin1 COLLATE latin1_general_ci NULL DEFAULT NULL,
-  `email` varchar(100) CHARACTER SET latin1 COLLATE latin1_general_ci NULL DEFAULT NULL,
-  `Profissao` varchar(50) CHARACTER SET latin1 COLLATE latin1_general_ci NULL DEFAULT NULL,
+  `Nome` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Telefone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `Profissao` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
   INDEX `fk_parentescos_tipos_parentesco_id`(`IdTipoParentesco` ASC) USING BTREE,
   INDEX `fk_parentescos_associados`(`IdAssociado` ASC) USING BTREE,
   CONSTRAINT `fk_parentescos_tipos_parentesco_id` FOREIGN KEY (`IdTipoParentesco`) REFERENCES `tipos_parentesco` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_parentescos_associados` FOREIGN KEY (`IdAssociado`) REFERENCES `associados` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1001 CHARACTER SET = latin1 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -329,7 +329,7 @@ CREATE TABLE `utilizadores_associados` (
   UNIQUE KEY `uk_utilizadores_associados_associado` (`IdAssociado`),
   CONSTRAINT `fk_ua_utilizador` FOREIGN KEY (`IdUtilizador`) REFERENCES `utilizadores` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_ua_associado` FOREIGN KEY (`IdAssociado`) REFERENCES `associados` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB CHARACTER SET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB CHARACTER SET=latin1 COLLATE=utf8mb4_unicode_ci;
 
 
 -- ----------------------------
@@ -351,7 +351,7 @@ CREATE TABLE `fichas_saude_historico` (
   CONSTRAINT `fk_fsh_ficha` FOREIGN KEY (`IdFichaSaude`) REFERENCES `fichas_saude` (`Id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_fsh_associado` FOREIGN KEY (`IdAssociado`) REFERENCES `associados` (`Id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_fsh_utilizador` FOREIGN KEY (`IdUtilizador`) REFERENCES `utilizadores` (`Id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB CHARACTER SET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB CHARACTER SET=latin1 COLLATE=utf8mb4_unicode_ci;
 
 
 SET FOREIGN_KEY_CHECKS = 1;

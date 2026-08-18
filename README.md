@@ -136,3 +136,7 @@ O N.º de Associado é armazenado em `CHAR(5)` e começa em `00001`.
 
 - **Associados:** N.º de Associado `CHAR(5)`, sequencial, começando em `00001`.
 - **Utilizadores:** não possuem qualquer número; o login é feito pelo campo `Nome`.
+
+## Encoding
+
+A versão 9.0 normaliza a aplicação e a base de dados para UTF-8 / `utf8mb4`.

@@ -8,7 +8,7 @@ return [
         'name' => 'siga',
         'user' => 'usrSiga',
         'password' => 'sigaUsr',
-        'charset' => 'latin1',
+        'charset' => 'utf8mb4',
     ],
     'app' => [
         'name' => 'SIGA',
