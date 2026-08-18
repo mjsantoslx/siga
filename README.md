@@ -115,3 +115,8 @@ A única regra é:
 - não é exigida combinação específica de maiúsculas, minúsculas, números ou símbolos.
 
 As palavras-passe continuam a ser armazenadas com `password_hash()` e nunca em texto simples.
+
+
+## Numeração dos associados
+
+Cada associado possui um **N.º de Associado** público, sequencial e único, começando em **1**. O número é atribuído automaticamente pela aplicação e é independente do `Id` técnico da tabela.

@@ -82,15 +82,21 @@ final class Associado
         $this->db->beginTransaction();
 
         try {
+            $nextStmt = $this->db->query(
+                'SELECT COALESCE(MAX(Numero), 0) + 1 FROM associados FOR UPDATE'
+            );
+            $numero = (int)$nextStmt->fetchColumn();
+
             $stmt = $this->db->prepare(
                 'INSERT INTO associados
-                (Nome, DNasc, IdGenero, CartaoCidadao, NIF, IdNacionalidade,
+                (Numero, Nome, DNasc, IdGenero, CartaoCidadao, NIF, IdNacionalidade,
                  Naturalidade, Profissao, Habilitacoes, DataRegisto, Activo)
                  VALUES
                 (:Nome, :DNasc, :IdGenero, :CartaoCidadao, :NIF, :IdNacionalidade,
                  :Naturalidade, :Profissao, :Habilitacoes, CURDATE(), 1)'
             );
             $stmt->execute([
+                'Numero' => $numero,
                 'Nome' => trim($data['Nome']),
                 'DNasc' => $data['DNasc'],
                 'IdGenero' => (int)$data['IdGenero'],

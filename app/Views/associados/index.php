@@ -7,10 +7,11 @@
 <button>Pesquisar</button>
 </form>
 <table>
-<thead><tr><th>Nome</th><th>NIF</th><th>Companhia(s)</th><th>Estado</th><th></th></tr></thead>
+<thead><tr><th>N.º</th><th>Nome</th><th>NIF</th><th>Companhia(s)</th><th>Estado</th><th></th></tr></thead>
 <tbody>
 <?php foreach ($rows as $row): ?>
 <tr>
+<td><?= (int)$row['Numero'] ?></td>
 <td><?= e($row['Nome']) ?></td>
 <td><?= e($row['NIF']) ?></td>
 <td><?= e($row['Companhias']) ?></td>

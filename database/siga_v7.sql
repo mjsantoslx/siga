@@ -108,6 +108,7 @@ CREATE TABLE `tipos_parentesco`  (
 DROP TABLE IF EXISTS `utilizadores`;
 CREATE TABLE `utilizadores`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Numero` int(11) NOT NULL,
   `Nome` varchar(100) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `Email` varchar(150) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `Password` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
@@ -118,6 +119,8 @@ CREATE TABLE `utilizadores`  (
 ) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_general_ci ROW_FORMAT = Dynamic;
 
 
+
+-- SIGA v7 - Criação da base de dados de raiz
 
 -- ----------------------------
 -- Table structure for associados
@@ -137,6 +140,7 @@ CREATE TABLE `associados`  (
   `DataRegisto` date NOT NULL,
   `Activo` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`Id`) USING BTREE,
+  UNIQUE INDEX `uk_associados_numero`(`Numero` ASC) USING BTREE,
   INDEX `fk_associados_generos_idgenero`(`IdGenero` ASC) USING BTREE,
   INDEX `fk_associados_nacionalidade_idnacionalidade`(`IdNacionalidade` ASC) USING BTREE,
   CONSTRAINT `fk_associados_nacionalidades_idnacionalidade` FOREIGN KEY (`IdNacionalidade`) REFERENCES `nacionalidades` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
