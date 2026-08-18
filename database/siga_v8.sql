@@ -1,3 +1,5 @@
+-- SIGA v8 - Criação da base de dados de raiz
+
 -- SIGA v6 - Criação da base de dados de raiz
 
 /*
@@ -108,7 +110,7 @@ CREATE TABLE `tipos_parentesco`  (
 DROP TABLE IF EXISTS `utilizadores`;
 CREATE TABLE `utilizadores`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Numero` int(11) NOT NULL,
+  `Numero` char(5) NOT NULL,
   `Nome` varchar(100) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `Email` varchar(150) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `Password` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
@@ -120,7 +122,7 @@ CREATE TABLE `utilizadores`  (
 
 
 
--- SIGA v7 - Criação da base de dados de raiz
+-- SIGA v8 - Criação da base de dados de raiz
 
 -- ----------------------------
 -- Table structure for associados

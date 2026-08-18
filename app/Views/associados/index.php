@@ -11,7 +11,7 @@
 <tbody>
 <?php foreach ($rows as $row): ?>
 <tr>
-<td><?= (int)$row['Numero'] ?></td>
+<td><?= e($row['Numero']) ?></td>
 <td><?= e($row['Nome']) ?></td>
 <td><?= e($row['NIF']) ?></td>
 <td><?= e($row['Companhias']) ?></td>

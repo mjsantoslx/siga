@@ -6,7 +6,7 @@
 <a class="button" href="<?= e($config['app']['base_url']) ?>/associados/<?= (int)$associate['Id'] ?>/saude">Ficha de saúde</a>
 </p>
 <table>
-<tr><th>N.º de Associado</th><td><strong><?= (int)$associate['Numero'] ?></strong></td></tr>
+<tr><th>N.º de Associado</th><td><strong><?= e($associate['Numero']) ?></strong></td></tr>
 <tr><th>ID interno</th><td><?= (int)$associate['Id'] ?></td></tr>
 <tr><th>Data nascimento</th><td><?= e($associate['DNasc']) ?></td></tr>
 <tr><th>Género</th><td><?= e($associate['Genero']) ?></td></tr>

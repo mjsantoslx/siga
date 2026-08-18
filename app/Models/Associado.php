@@ -83,9 +83,17 @@ final class Associado
 
         try {
             $nextStmt = $this->db->query(
-                'SELECT COALESCE(MAX(Numero), 0) + 1 FROM associados FOR UPDATE'
+                'SELECT COALESCE(MAX(CAST(Numero AS UNSIGNED)), 0) + 1
+                 FROM associados
+                 FOR UPDATE'
             );
-            $numero = (int)$nextStmt->fetchColumn();
+            $nextNumber = (int)$nextStmt->fetchColumn();
+
+            if ($nextNumber > 99999) {
+                throw new \RuntimeException('Foi atingido o limite máximo de 99.999 associados.');
+            }
+
+            $numero = str_pad((string)$nextNumber, 5, '0', STR_PAD_LEFT);
 
             $stmt = $this->db->prepare(
                 'INSERT INTO associados

@@ -120,3 +120,11 @@ As palavras-passe continuam a ser armazenadas com `password_hash()` e nunca em t
 ## Numeração dos associados
 
 Cada associado possui um **N.º de Associado** público, sequencial e único, começando em **1**. O número é atribuído automaticamente pela aplicação e é independente do `Id` técnico da tabela.
+
+## N.º de Associado
+
+Cada associado possui um **N.º de Associado** público com exactamente **5 caracteres**.
+
+Exemplos: `00001`, `00002`, `00010`, `00100`.
+
+O identificador é armazenado como `CHAR(5)`, preservando os zeros à esquerda. É único, atribuído automaticamente pela aplicação, independente do `Id` técnico e não é editável pelo utilizador. Os números atribuídos não são reutilizados.
