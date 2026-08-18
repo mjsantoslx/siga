@@ -110,8 +110,7 @@ CREATE TABLE `tipos_parentesco`  (
 DROP TABLE IF EXISTS `utilizadores`;
 CREATE TABLE `utilizadores`  (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Numero` char(5) NOT NULL,
-  `Nome` varchar(100) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+`Nome` varchar(100) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `Email` varchar(150) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `Password` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `Administrador` tinyint(1) NOT NULL DEFAULT 0,

@@ -100,7 +100,7 @@ final class Associado
                 (Numero, Nome, DNasc, IdGenero, CartaoCidadao, NIF, IdNacionalidade,
                  Naturalidade, Profissao, Habilitacoes, DataRegisto, Activo)
                  VALUES
-                (:Nome, :DNasc, :IdGenero, :CartaoCidadao, :NIF, :IdNacionalidade,
+                (:Numero, :Nome, :DNasc, :IdGenero, :CartaoCidadao, :NIF, :IdNacionalidade,
                  :Naturalidade, :Profissao, :Habilitacoes, CURDATE(), 1)'
             );
             $stmt->execute([

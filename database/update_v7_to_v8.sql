@@ -1,15 +1,12 @@
--- =========================================================
--- SIGA v8 - Actualização a partir da versão v7
--- =========================================================
---
--- O N.º de Associado passa a CHAR(5), mantendo os valores
--- existentes e preservando os zeros à esquerda.
--- =========================================================
-
+-- SIGA v8 - Actualização a partir da v7
 USE `siga`;
 
 START TRANSACTION;
 
+-- Utilizadores não possuem número.
+ALTER TABLE `utilizadores` DROP COLUMN `Numero`;
+
+-- Apenas associados possuem N.º de Associado, com 5 caracteres.
 ALTER TABLE `associados`
   MODIFY COLUMN `Numero` CHAR(5) CHARACTER SET latin1
   COLLATE latin1_general_ci NOT NULL;
