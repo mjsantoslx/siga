@@ -150,10 +150,17 @@ A versão 9.0 normaliza a aplicação e a base de dados para UTF-8 / `utf8mb4`.
 - Correcção: a listagem de associados inclui explicitamente o campo `Numero`.
 
 
-**Versão:** 10.1
+**Versão:** 11.0
 
 ## Revisão 10.1
 
 Correcção da listagem de associados: o campo `Numero` passa a ser
 seleccionado explicitamente pelo Model, permitindo a sua apresentação
 na listagem sem o erro `Undefined array key "Numero"`.
+
+## Versão 11.0
+
+- Companhia do associado é opcional.
+- Chefia Nacional pode coexistir com outra companhia.
+- Secções: Colónia, Alcateia, Tribo Júnior, Tribo Sénior, Clã e Chefia.
+- Histórico de evolução de secção em `associados_seccoes`.

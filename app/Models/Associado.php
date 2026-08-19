@@ -73,67 +73,75 @@ final class Associado
         return $stmt->fetch() ?: null;
     }
 
-    public function create(int $userId, array $data, int $companyId): int
+    public function create(int $userId, array $data, int $companyId, int $sectionId): int
     {
-        if (!$this->authorization->canManageAssociatesInCompany($userId, $companyId)) {
+        if ($companyId > 0 && !$this->authorization->canManageAssociatesInCompany($userId, $companyId)) {
             throw new \RuntimeException('Não tem permissão para criar associados nessa companhia.');
+        }
+        if ($sectionId <= 0) {
+            throw new \RuntimeException('É obrigatório indicar a secção.');
         }
 
         $this->db->beginTransaction();
-
         try {
             $nextStmt = $this->db->query(
-                'SELECT COALESCE(MAX(CAST(Numero AS UNSIGNED)), 0) + 1
-                 FROM associados
-                 FOR UPDATE'
+                'SELECT COALESCE(MAX(CAST(Numero AS UNSIGNED)), 0) + 1 FROM associados FOR UPDATE'
             );
-            $nextNumber = (int)$nextStmt->fetchColumn();
+            $nextNumber=(int)$nextStmt->fetchColumn();
+            if ($nextNumber>99999) throw new \RuntimeException('Foi atingido o limite máximo de 99.999 associados.');
+            $numero=str_pad((string)$nextNumber,5,'0',STR_PAD_LEFT);
 
-            if ($nextNumber > 99999) {
-                throw new \RuntimeException('Foi atingido o limite máximo de 99.999 associados.');
-            }
-
-            $numero = str_pad((string)$nextNumber, 5, '0', STR_PAD_LEFT);
-
-            $stmt = $this->db->prepare(
+            $stmt=$this->db->prepare(
                 'INSERT INTO associados
-                (Numero, Nome, DNasc, IdGenero, CartaoCidadao, NIF, IdNacionalidade,
-                 Naturalidade, Profissao, Habilitacoes, DataRegisto, Activo)
-                 VALUES
-                (:Numero, :Nome, :DNasc, :IdGenero, :CartaoCidadao, :NIF, :IdNacionalidade,
-                 :Naturalidade, :Profissao, :Habilitacoes, CURDATE(), 1)'
+                (Numero,Nome,DNasc,IdGenero,CartaoCidadao,NIF,IdNacionalidade,Naturalidade,Profissao,Habilitacoes,DataRegisto,Activo)
+                VALUES (:Numero,:Nome,:DNasc,:IdGenero,:CartaoCidadao,:NIF,:IdNacionalidade,:Naturalidade,:Profissao,:Habilitacoes,CURDATE(),1)'
             );
             $stmt->execute([
-                'Numero' => $numero,
-                'Nome' => trim($data['Nome']),
-                'DNasc' => $data['DNasc'],
-                'IdGenero' => (int)$data['IdGenero'],
-                'CartaoCidadao' => trim($data['CartaoCidadao']),
-                'NIF' => trim($data['NIF']),
-                'IdNacionalidade' => (int)$data['IdNacionalidade'],
-                'Naturalidade' => trim($data['Naturalidade']),
-                'Profissao' => trim($data['Profissao'] ?? ''),
-                'Habilitacoes' => trim($data['Habilitacoes'] ?? ''),
+                'Numero'=>$numero,'Nome'=>trim($data['Nome']),'DNasc'=>$data['DNasc'],
+                'IdGenero'=>(int)$data['IdGenero'],'CartaoCidadao'=>trim($data['CartaoCidadao']),
+                'NIF'=>trim($data['NIF']),'IdNacionalidade'=>(int)$data['IdNacionalidade'],
+                'Naturalidade'=>trim($data['Naturalidade']),'Profissao'=>trim($data['Profissao']??''),
+                'Habilitacoes'=>trim($data['Habilitacoes']??'')
             ]);
+            $associateId=(int)$this->db->lastInsertId();
 
-            $associateId = (int)$this->db->lastInsertId();
+            if ($companyId>0) {
+                $link=$this->db->prepare(
+                    'INSERT INTO associados_companhias (IdAssociado,IdCompanhia,DataInicio,DataFim,Activo)
+                     VALUES (:associado,:companhia,NOW(),NULL,1)'
+                );
+                $link->execute(['associado'=>$associateId,'companhia'=>$companyId]);
+            }
 
-            $link = $this->db->prepare(
-                'INSERT INTO associados_companhias
-                 (IdAssociado, IdCompanhia, DataInicio, DataFim, Activo)
-                 VALUES (:associado, :companhia, NOW(), NULL, 1)'
+            $section=$this->db->prepare(
+                'INSERT INTO associados_seccoes (IdAssociado,IdSeccao,DataInicio,DataFim,Activo)
+                 VALUES (:associado,:seccao,NOW(),NULL,1)'
             );
-            $link->execute([
-                'associado' => $associateId,
-                'companhia' => $companyId,
-            ]);
+            $section->execute(['associado'=>$associateId,'seccao'=>$sectionId]);
 
             $this->db->commit();
             return $associateId;
         } catch (\Throwable $e) {
-            $this->db->rollBack();
-            throw $e;
+            $this->db->rollBack(); throw $e;
         }
+    }
+
+    public function sections(): array
+    {
+        return $this->db->query('SELECT Id,Designacao FROM seccoes WHERE Activo=1 ORDER BY Id')->fetchAll();
+    }
+
+    public function currentSection(int $id): ?array
+    {
+        $s=$this->db->prepare('SELECT s.Id,s.Designacao FROM associados_seccoes a JOIN seccoes s ON s.Id=a.IdSeccao WHERE a.IdAssociado=:id AND a.Activo=1 AND a.DataFim IS NULL ORDER BY a.Id DESC LIMIT 1');
+        $s->execute(['id'=>$id]); return $s->fetch() ?: null;
+    }
+
+    public function sectionHistory(int $userId,int $id): array
+    {
+        if(!$this->authorization->canAccessAssociate($userId,$id)) return [];
+        $s=$this->db->prepare('SELECT a.*,s.Designacao FROM associados_seccoes a JOIN seccoes s ON s.Id=a.IdSeccao WHERE a.IdAssociado=:id ORDER BY a.DataInicio DESC,a.Id DESC');
+        $s->execute(['id'=>$id]); return $s->fetchAll();
     }
 
     public function update(int $userId, int $id, array $data): void

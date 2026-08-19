@@ -16,6 +16,14 @@ $action = $associate
 <label>Data de nascimento</label>
 <input type="date" name="DNasc" value="<?= e($associate['DNasc'] ?? '') ?>" required>
 
+<label>Secção</label>
+<select name="IdSeccao" required>
+<option value="">-- Seleccionar --</option>
+<?php foreach ($seccoes as $s): ?>
+<option value="<?= (int)$s['Id'] ?>"><?= e($s['Designacao']) ?></option>
+<?php endforeach; ?>
+</select>
+
 <label>Género</label>
 <select name="IdGenero" required>
 <option value="">-- Seleccionar --</option>
@@ -57,8 +65,8 @@ $action = $associate
 <input value="<?= e($companies[0]['Designacao']) ?>" disabled>
 <input type="hidden" name="IdCompanhia" value="<?= (int)$companies[0]['Id'] ?>">
 <?php else: ?>
-<select name="IdCompanhia" required>
-<option value="">-- Seleccionar --</option>
+<select name="IdCompanhia">
+<option value="">-- Sem companhia --</option>
 <?php foreach ($companies as $c): ?>
 <option value="<?= (int)$c['Id'] ?>"><?= e($c['Designacao']) ?></option>
 <?php endforeach; ?>

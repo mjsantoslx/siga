@@ -43,6 +43,7 @@ final class AssociadosController extends Controller
             'generos' => $generos,
             'nacionalidades' => $nacionalidades,
             'companhias' => $this->companyModel()->accessibleForUser(Auth::id()),
+            'seccoes' => $this->model()->sections(),
         ];
     }
 
@@ -91,9 +92,10 @@ final class AssociadosController extends Controller
         }
 
         $companyId = (int)($_POST['IdCompanhia'] ?? 0);
+        $sectionId = (int)($_POST['IdSeccao'] ?? 0);
 
         try {
-            $id = $this->model()->create(Auth::id(), $_POST, $companyId);
+            $id = $this->model()->create(Auth::id(), $_POST, $companyId, $sectionId);
             $this->redirect("associados/{$id}");
         } catch (\Throwable $e) {
             Logger::error('Erro ao criar associado.', $e);
@@ -174,6 +176,8 @@ final class AssociadosController extends Controller
         $this->view('associados/show', [
             'associate' => $associate,
             'health' => $model->healthForUser(Auth::id(), $id),
+            'section' => $model->currentSection($id),
+            'sectionHistory' => $model->sectionHistory(Auth::id(), $id),
             'healthHistory' => $model->healthHistory(Auth::id(), $id),
             'csrf' => Csrf::token(),
         ]);
