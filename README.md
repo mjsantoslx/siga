@@ -140,3 +140,9 @@ O N.º de Associado é armazenado em `CHAR(5)` e começa em `00001`.
 ## Encoding
 
 A versão 9.0 normaliza a aplicação e a base de dados para UTF-8 / `utf8mb4`.
+
+
+## Alterações da versão 10.0
+
+- Na criação de associados, **Portuguesa** é apresentada em primeiro lugar na lista de nacionalidades; as restantes seguem alfabeticamente.
+- As listagens principais passam a permitir ordenação clicando no cabeçalho das colunas.

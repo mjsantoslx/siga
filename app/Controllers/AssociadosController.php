@@ -32,7 +32,11 @@ final class AssociadosController extends Controller
         $db = Database::connection($this->config);
         $generos = $db->query('SELECT Id, Designacao FROM generos ORDER BY Designacao')->fetchAll();
         $nacionalidades = $db->query(
-            'SELECT Id, Nacionalidade FROM nacionalidades ORDER BY Nacionalidade'
+            "SELECT Id, Nacionalidade
+             FROM nacionalidades
+             ORDER BY
+                 CASE WHEN Nacionalidade = 'Portuguesa' THEN 0 ELSE 1 END,
+                 Nacionalidade"
         )->fetchAll();
 
         return [
