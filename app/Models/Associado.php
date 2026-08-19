@@ -19,7 +19,7 @@ final class Associado
 
         $sql = "
             SELECT DISTINCT
-                a.Id, a.Nome, a.DNasc, a.CartaoCidadao, a.NIF,
+                a.Id, a.Numero, a.Nome, a.DNasc, a.CartaoCidadao, a.NIF,
                 a.Naturalidade, a.Profissao, a.Habilitacoes, a.DataRegisto,
                 a.Activo,
                 g.Designacao AS Genero,

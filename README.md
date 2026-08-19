@@ -146,3 +146,14 @@ A versão 9.0 normaliza a aplicação e a base de dados para UTF-8 / `utf8mb4`.
 
 - Na criação de associados, **Portuguesa** é apresentada em primeiro lugar na lista de nacionalidades; as restantes seguem alfabeticamente.
 - As listagens principais passam a permitir ordenação clicando no cabeçalho das colunas.
+
+- Correcção: a listagem de associados inclui explicitamente o campo `Numero`.
+
+
+**Versão:** 10.1
+
+## Revisão 10.1
+
+Correcção da listagem de associados: o campo `Numero` passa a ser
+seleccionado explicitamente pelo Model, permitindo a sua apresentação
+na listagem sem o erro `Undefined array key "Numero"`.
