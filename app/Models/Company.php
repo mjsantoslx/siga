@@ -95,6 +95,34 @@ final class Company
         ]);
     }
 
+    public function currentAddress(int $id): ?array
+    {
+        $s=$this->db->prepare('SELECT m.*,cm.Id AS IdCompanhiaMorada,cm.DataInicio,cm.DataFim,cm.Activo FROM companhias_moradas cm INNER JOIN moradas m ON m.Id=cm.IdMorada WHERE cm.IdCompanhia=:id AND cm.Activo=1 AND cm.DataFim IS NULL ORDER BY cm.Id DESC LIMIT 1');
+        $s->execute(['id'=>$id]); return $s->fetch() ?: null;
+    }
+    public function addressHistory(int $id): array
+    {
+        $s=$this->db->prepare('SELECT m.*,cm.Id AS IdCompanhiaMorada,cm.DataInicio,cm.DataFim,cm.Activo FROM companhias_moradas cm INNER JOIN moradas m ON m.Id=cm.IdMorada WHERE cm.IdCompanhia=:id ORDER BY cm.DataInicio DESC,cm.Id DESC');
+        $s->execute(['id'=>$id]); return $s->fetchAll();
+    }
+    public function saveAddress(int $id,array $data): void
+    {
+        $company=$this->find($id);
+        if(!$company) throw new \RuntimeException('Companhia inexistente.');
+        $m=trim((string)($data['Morada']??''));$l=trim((string)($data['Localidade']??''));$cp=trim((string)($data['CodPostal']??''));
+        if($m===''||$l==='') throw new \RuntimeException('Morada e localidade são obrigatórias.');
+        $this->db->beginTransaction();
+        try{
+            $cur=$this->currentAddress($id);
+            if($cur&&$cur['Morada']===$m&&$cur['Localidade']===$l&&($cur['CodPostal']??'')===$cp){$this->db->commit();return;}
+            $s=$this->db->prepare('INSERT INTO moradas (Morada,Localidade,IdConcelho,IdDistrito,CodPostal) VALUES (:m,:l,NULL,NULL,:cp)');
+            $s->execute(['m'=>$m,'l'=>$l,'cp'=>$cp!==''?$cp:null]);$mid=(int)$this->db->lastInsertId();
+            if($cur){$s=$this->db->prepare('UPDATE companhias_moradas SET Activo=0,DataFim=NOW() WHERE Id=:id');$s->execute(['id'=>$cur['IdCompanhiaMorada']]);}
+            $s=$this->db->prepare('INSERT INTO companhias_moradas (IdCompanhia,IdMorada,DataInicio,DataFim,Activo) VALUES (:c,:m,NOW(),NULL,1)');
+            $s->execute(['c'=>$id,'m'=>$mid]);$this->db->commit();
+        }catch(\Throwable $e){$this->db->rollBack();throw $e;}
+    }
+
     public function deactivate(int $id): void
     {
         $company = $this->find($id);

@@ -52,6 +52,10 @@ if (preg_match('#^/associados/(\\d+)/reactivar$#', $uri, $m)) {
     $associados->reactivate((int)$m[1]);
     exit;
 }
+if (preg_match('#^/associados/(\\d+)/morada$#', $uri, $m)) {
+    $associados->address((int)$m[1]);
+    exit;
+}
 if (preg_match('#^/associados/(\\d+)/saude$#', $uri, $m)) {
     $associados->health((int)$m[1]);
     exit;
@@ -114,6 +118,10 @@ if ($method === 'POST' && $uri === '/companhias/nova') { $companhias->store(); e
 if (preg_match('#^/companhias/(\\d+)/editar$#', $uri, $m)) {
     if ($method === 'GET') $companhias->edit((int)$m[1]);
     elseif ($method === 'POST') $companhias->update((int)$m[1]);
+    exit;
+}
+if (preg_match('#^/companhias/(\\d+)/morada$#', $uri, $m)) {
+    $companhias->address((int)$m[1]);
     exit;
 }
 if (preg_match('#^/companhias/(\\d+)/desactivar$#', $uri, $m) && $method === 'POST') {

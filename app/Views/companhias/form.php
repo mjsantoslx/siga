@@ -13,6 +13,9 @@ $action = $company
 <input name="Designacao" value="<?= e($company['Designacao'] ?? '') ?>" required <?= ($company && (int)$company['ambito_global']) ? 'readonly' : '' ?>>
 <?php if ($company && (int)$company['ambito_global']): ?><p><strong>Chefia Nacional: registo protegido.</strong></p><?php endif; ?>
 <button type="submit">Guardar</button>
+<?php if ($company): ?>
+<a class="button" href="<?= e($config['app']['base_url']) ?>/companhias/<?= (int)$company['Id'] ?>/morada">Gerir morada</a>
+<?php endif; ?>
 <a class="button secondary" href="<?= e($config['app']['base_url']) ?>/companhias">Cancelar</a>
 </form>
 <?php require dirname(__DIR__) . '/layouts/footer.php'; ?>

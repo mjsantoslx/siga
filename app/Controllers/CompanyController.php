@@ -81,6 +81,8 @@ final class CompanyController extends Controller
 
         $this->view('companhias/form', [
             'company' => $company,
+            'address' => $this->model()->currentAddress($id),
+            'addressHistory' => $this->model()->addressHistory($id),
             'csrf' => Csrf::token(),
             'error' => null,
         ]);
@@ -102,6 +104,19 @@ final class CompanyController extends Controller
             $_SESSION['_error'] = $e->getMessage();
             $this->redirect("companhias/{$id}/editar");
         }
+    }
+
+    public function address(int $id): void
+    {
+        $this->requireAdministrator(); $company=$this->model()->find($id);
+        if(!$company){http_response_code(404);exit('404 - Companhia não encontrada');}
+        if($_SERVER['REQUEST_METHOD']==='POST'){
+            if(!Csrf::validate($_POST['_csrf']??null)){$_SESSION['_error']='Pedido inválido.';$this->redirect("companhias/{$id}/morada");}
+            try{$this->model()->saveAddress($id,$_POST);$this->redirect("companhias/{$id}/editar");}
+            catch(\Throwable $e){Logger::error("Erro ao alterar morada da companhia {$id}.",$e);$_SESSION['_error']=$e->getMessage();}
+        }
+        $this->view('companhias/address',['company'=>$company,'address'=>$this->model()->currentAddress($id),'addressHistory'=>$this->model()->addressHistory($id),'csrf'=>Csrf::token(),'error'=>$_SESSION['_error']??null]);
+        unset($_SESSION['_error']);
     }
 
     public function deactivate(int $id): void

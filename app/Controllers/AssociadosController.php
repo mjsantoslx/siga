@@ -184,6 +184,8 @@ final class AssociadosController extends Controller
             'health' => $model->healthForUser(Auth::id(), $id),
             'section' => $model->currentSection($id),
             'sectionHistory' => $model->sectionHistory(Auth::id(), $id),
+            'address' => $model->currentAddress($id),
+            'addressHistory' => $model->addressHistory(Auth::id(), $id),
             'healthHistory' => $model->healthHistory(Auth::id(), $id),
             'csrf' => Csrf::token(),
         ]);
@@ -237,6 +239,20 @@ final class AssociadosController extends Controller
                 'error' => $_SESSION['_error'] ?? null,
             ]
         ));
+        unset($_SESSION['_error']);
+    }
+
+    public function address(int $id): void
+    {
+        $this->requireLogin(); $model=$this->model();
+        $associate=$model->findForUser(Auth::id(),$id);
+        if(!$associate){http_response_code(404);exit('404 - Associado não encontrado');}
+        if($_SERVER['REQUEST_METHOD']==='POST'){
+            if(!Csrf::validate($_POST['_csrf']??null)){$_SESSION['_error']='Pedido inválido.';$this->redirect("associados/{$id}/morada");}
+            try{$model->saveAddress(Auth::id(),$id,$_POST);$this->redirect("associados/{$id}");}
+            catch(\Throwable $e){Logger::error("Erro ao alterar morada do associado {$id}.",$e);$_SESSION['_error']=$e->getMessage();}
+        }
+        $this->view('associados/address',['associate'=>$associate,'address'=>$model->currentAddress($id),'csrf'=>Csrf::token(),'error'=>$_SESSION['_error']??null]);
         unset($_SESSION['_error']);
     }
 

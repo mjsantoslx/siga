@@ -150,7 +150,7 @@ A versão 9.0 normaliza a aplicação e a base de dados para UTF-8 / `utf8mb4`.
 - Correcção: a listagem de associados inclui explicitamente o campo `Numero`.
 
 
-**Versão:** 11.9
+**Versão:** 12.1
 
 ## Revisão 10.1
 
@@ -238,3 +238,20 @@ na listagem sem o erro `Undefined array key "Numero"`.
 - A migração preserva as relações existentes, considerando-as a morada actual a partir da data da migração.
 - Não foram alteradas as tabelas `moradas`.
 - Esta versão altera apenas o modelo de dados; a camada de aplicação será adaptada numa versão posterior.
+
+## Versão 12.0
+
+- Implementada a gestão de moradas de associados e companhias.
+- A morada é uma entidade independente em `moradas`.
+- Alterações de morada encerram a relação anterior e criam uma nova, preservando o histórico.
+- A ficha do associado apresenta a morada actual e o histórico e permite gerir a morada.
+- A gestão das moradas das companhias está disponível a administradores.
+- A Chefia Nacional permanece protegida.
+- Não existem alterações ao schema da base de dados nesta versão.
+
+## Versão 12.1
+
+- Correcção: a Chefia Nacional pode alterar a sua morada.
+- A alteração da morada da Chefia Nacional mantém o histórico, tal como nas restantes companhias.
+- A protecção contra eliminação/desactivação da Chefia Nacional mantém-se.
+- Não existem alterações ao schema da base de dados.

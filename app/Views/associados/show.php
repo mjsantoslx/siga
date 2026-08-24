@@ -38,6 +38,17 @@
 <?php foreach ($sectionHistory as $s): ?><tr><td><?= e($s["Designacao"]) ?></td><td><?= e($s["Nominativo"]) ?></td><td><?= e($s["DataInicio"]) ?></td><td><?= e($s["DataFim"] ?? "") ?></td><td><?= (int)$s["Activo"] ? "Actual" : "Histórica" ?></td></tr><?php endforeach; ?>
 </tbody></table>
 
+<h2>Morada</h2>
+<?php if ($address): ?><table>
+<tr><th>Morada</th><td><?= e($address['Morada']) ?></td></tr>
+<tr><th>Localidade</th><td><?= e($address['Localidade']) ?></td></tr>
+<tr><th>Código Postal</th><td><?= e($address['CodPostal']) ?></td></tr>
+</table><?php else: ?><p>Não existe morada registada.</p><?php endif; ?>
+<p><a class="button" href="<?= e($config['app']['base_url']) ?>/associados/<?= (int)$associate['Id'] ?>/morada"><?= $address?'Alterar morada':'Registar morada' ?></a></p>
+<h3>Histórico de moradas</h3>
+<table><thead><tr><th>Morada</th><th>Localidade</th><th>Código Postal</th><th>Início</th><th>Fim</th><th>Estado</th></tr></thead><tbody>
+<?php foreach($addressHistory as $a): ?><tr><td><?= e($a['Morada']) ?></td><td><?= e($a['Localidade']) ?></td><td><?= e($a['CodPostal']) ?></td><td><?= e($a['DataInicio']) ?></td><td><?= e($a['DataFim']??'') ?></td><td><?= (int)$a['Activo']?'Actual':'Histórica' ?></td></tr><?php endforeach; ?>
+</tbody></table>
 <h2>Ficha de saúde actual</h2>
 <?php if ($health): ?>
 <table>

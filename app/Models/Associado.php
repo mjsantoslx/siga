@@ -355,6 +355,34 @@ final class Associado
         }
     }
 
+    public function currentAddress(int $id): ?array
+    {
+        $s=$this->db->prepare('SELECT m.*,am.Id AS IdAssociadoMorada,am.DataInicio,am.DataFim,am.Activo FROM associados_moradas am INNER JOIN moradas m ON m.Id=am.IdMorada WHERE am.IdAssociado=:id AND am.Activo=1 AND am.DataFim IS NULL ORDER BY am.Id DESC LIMIT 1');
+        $s->execute(['id'=>$id]); return $s->fetch() ?: null;
+    }
+    public function addressHistory(int $userId,int $id): array
+    {
+        if(!$this->authorization->canAccessAssociate($userId,$id)) return [];
+        $s=$this->db->prepare('SELECT m.*,am.Id AS IdAssociadoMorada,am.DataInicio,am.DataFim,am.Activo FROM associados_moradas am INNER JOIN moradas m ON m.Id=am.IdMorada WHERE am.IdAssociado=:id ORDER BY am.DataInicio DESC,am.Id DESC');
+        $s->execute(['id'=>$id]); return $s->fetchAll();
+    }
+    public function saveAddress(int $userId,int $id,array $data): void
+    {
+        if(!$this->authorization->canAccessAssociate($userId,$id)) throw new \RuntimeException('Não tem permissão para alterar a morada deste associado.');
+        $morada=trim((string)($data['Morada']??'')); $localidade=trim((string)($data['Localidade']??'')); $cp=trim((string)($data['CodPostal']??''));
+        if($morada===''||$localidade==='') throw new \RuntimeException('Morada e localidade são obrigatórias.');
+        $this->db->beginTransaction();
+        try {
+            $cur=$this->currentAddress($id);
+            if($cur && $cur['Morada']===$morada && $cur['Localidade']===$localidade && ($cur['CodPostal']??'')===$cp){$this->db->commit();return;}
+            $s=$this->db->prepare('INSERT INTO moradas (Morada,Localidade,IdConcelho,IdDistrito,CodPostal) VALUES (:m,:l,NULL,NULL,:cp)');
+            $s->execute(['m'=>$morada,'l'=>$localidade,'cp'=>$cp!==''?$cp:null]); $mid=(int)$this->db->lastInsertId();
+            if($cur){$s=$this->db->prepare('UPDATE associados_moradas SET Activo=0,DataFim=NOW() WHERE Id=:id');$s->execute(['id'=>$cur['IdAssociadoMorada']]);}
+            $s=$this->db->prepare('INSERT INTO associados_moradas (IdAssociado,IdMorada,DataInicio,DataFim,Activo) VALUES (:a,:m,NOW(),NULL,1)');
+            $s->execute(['a'=>$id,'m'=>$mid]); $this->db->commit();
+        } catch(\Throwable $e){$this->db->rollBack();throw $e;}
+    }
+
     public function healthForUser(int $userId, int $id): ?array
     {
         if (!$this->authorization->canAccessAssociate($userId, $id)) {
