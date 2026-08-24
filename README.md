@@ -150,7 +150,7 @@ A versão 9.0 normaliza a aplicação e a base de dados para UTF-8 / `utf8mb4`.
 - Correcção: a listagem de associados inclui explicitamente o campo `Numero`.
 
 
-**Versão:** 11.7
+**Versão:** 11.8
 
 ## Revisão 10.1
 
@@ -220,4 +220,10 @@ na listagem sem o erro `Undefined array key "Numero"`.
 - Ao reactivar, é escolhida a secção actual.
 - A companhia é opcional para administradores; utilizadores regulares têm de indicar uma companhia a que tenham acesso.
 - A reactivação cria novas relações, preservando o histórico anterior.
+- Não existem alterações ao schema da base de dados.
+
+## Versão 11.8
+
+- Correcção da rota HTTP de reactivação de associados.
+- A rota `/associados/{id}/reactivar` passa a estar correctamente fora do bloco da rota de desactivação.
 - Não existem alterações ao schema da base de dados.

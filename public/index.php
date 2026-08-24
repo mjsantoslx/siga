@@ -47,11 +47,10 @@ if (preg_match('#^/associados/(\\d+)/editar$#', $uri, $m)) {
 if (preg_match('#^/associados/(\\d+)/desactivar$#', $uri, $m) && $method === 'POST') {
     $associados->deactivate((int)$m[1]);
     exit;
-
-if (preg_match('#^/associados/(\d+)/reactivar$#', $uri, $m)) {
+}
+if (preg_match('#^/associados/(\\d+)/reactivar$#', $uri, $m)) {
     $associados->reactivate((int)$m[1]);
     exit;
-}
 }
 if (preg_match('#^/associados/(\\d+)/saude$#', $uri, $m)) {
     $associados->health((int)$m[1]);
