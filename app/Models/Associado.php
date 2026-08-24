@@ -281,6 +281,15 @@ final class Associado
             );
             $link->execute(['id' => $id]);
 
+            // Ao inactivar o associado, encerra também a secção actual,
+            // preservando-a integralmente no histórico.
+            $section = $this->db->prepare(
+                'UPDATE associados_seccoes
+                 SET Activo = 0, DataFim = NOW()
+                 WHERE IdAssociado = :id AND Activo = 1 AND DataFim IS NULL'
+            );
+            $section->execute(['id' => $id]);
+
             $this->db->commit();
         } catch (\Throwable $e) {
             $this->db->rollBack();

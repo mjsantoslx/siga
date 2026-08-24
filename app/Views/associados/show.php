@@ -2,8 +2,20 @@
 <h1><?= e($associate['Nome']) ?></h1>
 <?php if ($error ?? null): ?><div class="alert"><?= e($error) ?></div><?php endif; ?>
 <p>
+<?php if ((int)$associate['Activo']): ?>
 <a class="button" href="<?= e($config['app']['base_url']) ?>/associados/<?= (int)$associate['Id'] ?>/editar">Editar</a>
 <a class="button" href="<?= e($config['app']['base_url']) ?>/associados/<?= (int)$associate['Id'] ?>/saude">Ficha de saúde</a>
+
+<form method="post"
+      action="<?= e($config['app']['base_url']) ?>/associados/<?= (int)$associate['Id'] ?>/inactivar"
+      style="display:inline"
+      onsubmit="return confirm('Tem a certeza de que pretende inactivar o associado <?= e($associate['Numero']) ?> — <?= e($associate['Nome']) ?>?\n\nOs dados não serão eliminados. As relações activas com companhias e a secção actual serão encerradas e ficarão no histórico.');">
+    <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
+    <button type="submit" class="button">Inactivar associado</button>
+</form>
+<?php else: ?>
+<span class="button" aria-disabled="true">Associado inactivo</span>
+<?php endif; ?>
 </p>
 <table>
 <tr><th>N.º de Associado</th><td><strong><?= e($associate['Numero']) ?></strong></td></tr>

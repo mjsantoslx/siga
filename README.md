@@ -150,7 +150,7 @@ A versão 9.0 normaliza a aplicação e a base de dados para UTF-8 / `utf8mb4`.
 - Correcção: a listagem de associados inclui explicitamente o campo `Numero`.
 
 
-**Versão:** 11.4
+**Versão:** 11.5
 
 ## Revisão 10.1
 
@@ -196,4 +196,14 @@ na listagem sem o erro `Undefined array key "Numero"`.
 - Secção actual carregada e seleccionada no formulário de edição.
 - Alteração de secção passa a manter o histórico em `associados_seccoes`.
 - Validação da secção durante a actualização.
+- Não existem alterações ao schema da base de dados.
+
+## Versão 11.5
+
+- Adicionado o botão **Inactivar associado** na ficha do associado.
+- A operação exige confirmação e protecção CSRF.
+- A inactivação não elimina dados.
+- As relações activas com companhias são encerradas e mantidas no histórico.
+- A secção actual também é encerrada e mantida no histórico.
+- Um associado já inactivo apresenta o estado **Associado inactivo** em vez do botão de inactivação.
 - Não existem alterações ao schema da base de dados.
