@@ -17,12 +17,13 @@
 <tr><th>Profissão</th><td><?= e($associate['Profissao']) ?></td></tr>
 <tr><th>Habilitações</th><td><?= e($associate['Habilitacoes']) ?></td></tr>
 <tr><th>Secção actual</th><td><?= e($section["Designacao"] ?? "—") ?></td></tr>
+<tr><th>Nominativo</th><td><?= e($section["Nominativo"] ?? "—") ?></td></tr>
 <tr><th>Estado</th><td><?= (int)$associate['Activo'] ? 'Activo' : 'Inactivo' ?></td></tr>
 </table>
 
 <h2>Histórico de secções</h2>
-<table><thead><tr><th>Secção</th><th>Início</th><th>Fim</th><th>Estado</th></tr></thead><tbody>
-<?php foreach ($sectionHistory as $s): ?><tr><td><?= e($s["Designacao"]) ?></td><td><?= e($s["DataInicio"]) ?></td><td><?= e($s["DataFim"] ?? "") ?></td><td><?= (int)$s["Activo"] ? "Actual" : "Histórica" ?></td></tr><?php endforeach; ?>
+<table><thead><tr><th>Secção</th><th>Nominativo</th><th>Início</th><th>Fim</th><th>Estado</th></tr></thead><tbody>
+<?php foreach ($sectionHistory as $s): ?><tr><td><?= e($s["Designacao"]) ?></td><td><?= e($s["Nominativo"]) ?></td><td><?= e($s["DataInicio"]) ?></td><td><?= e($s["DataFim"] ?? "") ?></td><td><?= (int)$s["Activo"] ? "Actual" : "Histórica" ?></td></tr><?php endforeach; ?>
 </tbody></table>
 
 <h2>Ficha de saúde actual</h2>

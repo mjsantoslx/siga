@@ -1,4 +1,4 @@
--- SIGA v11 - Criação da base de dados de raiz
+-- SIGA v11.3 - Criação da base de dados de raiz
 
 -- SIGA v6 - Criação da base de dados de raiz
 
@@ -121,7 +121,7 @@ CREATE TABLE `utilizadores`  (
 
 
 
--- SIGA v11 - Criação da base de dados de raiz
+-- SIGA v11.3 - Criação da base de dados de raiz
 
 -- ----------------------------
 -- Table structure for associados
@@ -385,13 +385,20 @@ DROP TABLE IF EXISTS `seccoes`;
 CREATE TABLE `seccoes` (
  `Id` int(11) NOT NULL AUTO_INCREMENT,
  `Designacao` varchar(50) NOT NULL,
- `Activo` tinyint(1) NOT NULL DEFAULT 1,
+ `NominativoMasculino` varchar(50) NOT NULL,
+ `NominativoFeminino` varchar(50) NOT NULL,
  PRIMARY KEY (`Id`),
  UNIQUE KEY `uk_seccoes_designacao` (`Designacao`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `seccoes` (`Designacao`) VALUES
-('Colónia'),('Alcateia'),('Tribo Júnior'),('Tribo Sénior'),('Clã'),('Chefia');
+INSERT INTO `seccoes`
+ (`Designacao`, `NominativoMasculino`, `NominativoFeminino`) VALUES
+ ('Colónia', 'Castor', 'Castora'),
+ ('Alcateia', 'Lobito', 'Lobita'),
+ ('Tribo Júnior', 'Escoteiro Júnior', 'Escoteira Júnior'),
+ ('Tribo Sénior', 'Escoteiro Sénior', 'Escoteira Sénior'),
+ ('Clã', 'Caminheiro', 'Caminheira'),
+ ('Chefia', 'Escoteiro Chefe', 'Escoteira Chefe');
 
 CREATE TABLE `associados_seccoes` (
  `Id` int(11) NOT NULL AUTO_INCREMENT,

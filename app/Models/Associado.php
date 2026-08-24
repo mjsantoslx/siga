@@ -24,6 +24,12 @@ final class Associado
                 a.Activo,
                 g.Designacao AS Genero,
                 n.Nacionalidade,
+                s.Designacao AS Seccao,
+                CASE
+                    WHEN LOWER(g.Designacao) IN ('masculino','m','homem') THEN s.NominativoMasculino
+                    WHEN LOWER(g.Designacao) IN ('feminino','f','mulher') THEN s.NominativoFeminino
+                    ELSE s.Designacao
+                END AS Nominativo,
                 GROUP_CONCAT(DISTINCT c.Designacao ORDER BY c.Designacao SEPARATOR ', ') AS Companhias
             FROM associados a
             LEFT JOIN generos g ON g.Id = a.IdGenero
@@ -33,6 +39,11 @@ final class Associado
                AND ac.Activo = 1
                AND ac.DataFim IS NULL
             LEFT JOIN companhias c ON c.Id = ac.IdCompanhia
+            LEFT JOIN associados_seccoes ase
+                ON ase.IdAssociado = a.Id
+               AND ase.Activo = 1
+               AND ase.DataFim IS NULL
+            LEFT JOIN seccoes s ON s.Id = ase.IdSeccao
             WHERE {$filter['sql']}
         ";
 
@@ -128,22 +139,51 @@ final class Associado
 
     public function sections(): array
     {
-        return $this->db->query('SELECT Id,Designacao FROM seccoes WHERE Activo=1 ORDER BY Id')->fetchAll();
+        return $this->db->query('SELECT Id,Designacao,NominativoMasculino,NominativoFeminino FROM seccoes ORDER BY Id')->fetchAll();
     }
 
     public function currentSection(int $id): ?array
     {
-        $s=$this->db->prepare('SELECT s.Id,s.Designacao FROM associados_seccoes a JOIN seccoes s ON s.Id=a.IdSeccao WHERE a.IdAssociado=:id AND a.Activo=1 AND a.DataFim IS NULL ORDER BY a.Id DESC LIMIT 1');
-        $s->execute(['id'=>$id]); return $s->fetch() ?: null;
+        $s = $this->db->prepare(
+            'SELECT s.Id, s.Designacao, s.NominativoMasculino, s.NominativoFeminino,
+                    g.Designacao AS Genero,
+                    CASE
+                        WHEN LOWER(g.Designacao) IN (\'masculino\',\'m\',\'homem\') THEN s.NominativoMasculino
+                        WHEN LOWER(g.Designacao) IN (\'feminino\',\'f\',\'mulher\') THEN s.NominativoFeminino
+                        ELSE s.Designacao
+                    END AS Nominativo
+             FROM associados_seccoes a
+             INNER JOIN seccoes s ON s.Id = a.IdSeccao
+             INNER JOIN associados x ON x.Id = a.IdAssociado
+             LEFT JOIN generos g ON g.Id = x.IdGenero
+             WHERE a.IdAssociado = :id AND a.Activo = 1 AND a.DataFim IS NULL
+             ORDER BY a.Id DESC LIMIT 1'
+        );
+        $s->execute(['id' => $id]);
+        return $s->fetch() ?: null;
     }
-
-    public function sectionHistory(int $userId,int $id): array
+    public function sectionHistory(int $userId, int $id): array
     {
-        if(!$this->authorization->canAccessAssociate($userId,$id)) return [];
-        $s=$this->db->prepare('SELECT a.*,s.Designacao FROM associados_seccoes a JOIN seccoes s ON s.Id=a.IdSeccao WHERE a.IdAssociado=:id ORDER BY a.DataInicio DESC,a.Id DESC');
-        $s->execute(['id'=>$id]); return $s->fetchAll();
-    }
+        if (!$this->authorization->canAccessAssociate($userId, $id)) return [];
 
+        $s = $this->db->prepare(
+            'SELECT a.*, s.Designacao, s.NominativoMasculino, s.NominativoFeminino,
+                    g.Designacao AS Genero,
+                    CASE
+                        WHEN LOWER(g.Designacao) IN (\'masculino\',\'m\',\'homem\') THEN s.NominativoMasculino
+                        WHEN LOWER(g.Designacao) IN (\'feminino\',\'f\',\'mulher\') THEN s.NominativoFeminino
+                        ELSE s.Designacao
+                    END AS Nominativo
+             FROM associados_seccoes a
+             INNER JOIN seccoes s ON s.Id = a.IdSeccao
+             INNER JOIN associados x ON x.Id = a.IdAssociado
+             LEFT JOIN generos g ON g.Id = x.IdGenero
+             WHERE a.IdAssociado = :id
+             ORDER BY a.DataInicio DESC, a.Id DESC'
+        );
+        $s->execute(['id' => $id]);
+        return $s->fetchAll();
+    }
     public function update(int $userId, int $id, array $data): void
     {
         if (!$this->authorization->canAccessAssociate($userId, $id)) {

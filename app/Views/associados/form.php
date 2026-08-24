@@ -14,7 +14,11 @@ $action = $associate
 <input name="Nome" value="<?= e($associate['Nome'] ?? '') ?>" required>
 
 <label>Data de nascimento</label>
-<input type="date" name="DNasc" value="<?= e($associate['DNasc'] ?? '') ?>" required>
+<input type="text" name="DNasc" id="DNasc"
+       value="<?= e($associado['DNasc'] ?? ($_POST['DNasc'] ?? '')) ?>"
+       placeholder="dd/mm/aaaa"
+       pattern="(?:0[1-9]|[12][0-9]|3[01])/(?:0[1-9]|1[0-2])/\d{4}"
+       inputmode="numeric" maxlength="10" required>" required>
 
 <label>Secção</label>
 <select name="IdSeccao" required>
@@ -78,3 +82,25 @@ $action = $associate
 <a class="button secondary" href="<?= e($config['app']['base_url']) ?>/associados">Cancelar</a>
 </form>
 <?php require dirname(__DIR__) . '/layouts/footer.php'; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('DNasc');
+    if (!input) return;
+    input.addEventListener('input', function () {
+        let v = input.value.replace(/\D/g, '').slice(0, 8);
+        if (v.length > 4) v = v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4);
+        else if (v.length > 2) v = v.slice(0,2)+'/'+v.slice(2);
+        input.value = v;
+    });
+    input.form?.addEventListener('submit', function (e) {
+        const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(input.value);
+        if (!m) { e.preventDefault(); alert('A data de nascimento deve ser introduzida no formato dd/mm/aaaa.'); input.focus(); return; }
+        const d=+m[1], mo=+m[2], y=+m[3], dt=new Date(y,mo-1,d);
+        if (dt.getFullYear()!==y || dt.getMonth()!==mo-1 || dt.getDate()!==d) {
+            e.preventDefault(); alert('A data de nascimento indicada não é válida.'); input.focus(); return;
+        }
+        input.value = y+'-'+String(mo).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    });
+});
+</script>

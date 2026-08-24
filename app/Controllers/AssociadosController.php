@@ -66,11 +66,6 @@ final class AssociadosController extends Controller
         $this->requireLogin();
 
         $companies = $this->companyModel()->accessibleForUser(Auth::id());
-        if (!$companies) {
-            http_response_code(403);
-            exit('403 - Não tem nenhuma companhia atribuída.');
-        }
-
         $this->view('associados/form', array_merge(
             $this->formData(),
             [
@@ -93,6 +88,11 @@ final class AssociadosController extends Controller
 
         $companyId = (int)($_POST['IdCompanhia'] ?? 0);
         $sectionId = (int)($_POST['IdSeccao'] ?? 0);
+
+        // Normaliza dd/mm/aaaa para YYYY-MM-DD.
+        if (!empty($_POST['DNasc']) && preg_match('/^(\\d{2})\\/(\\d{2})\\/(\\d{4})$/', $_POST['DNasc'], $m)) {
+            $_POST['DNasc'] = $m[3] . '-' . $m[2] . '-' . $m[1];
+        }
 
         try {
             $id = $this->model()->create(Auth::id(), $_POST, $companyId, $sectionId);

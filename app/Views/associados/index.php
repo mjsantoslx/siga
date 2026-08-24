@@ -7,7 +7,7 @@
 <button>Pesquisar</button>
 </form>
 <table data-sortable-table="1">
-<thead><tr><th>N.º</th><th>Nome</th><th>NIF</th><th>Companhia(s)</th><th>Estado</th><th></th></tr></thead>
+<thead><tr><th>N.º</th><th>Nome</th><th>NIF</th><th>Companhia(s)</th><th>Secção / Nominativo</th><th>Estado</th><th></th></tr></thead>
 <tbody>
 <?php foreach ($rows as $row): ?>
 <tr>
@@ -15,6 +15,7 @@
 <td><?= e($row['Nome']) ?></td>
 <td><?= e($row['NIF']) ?></td>
 <td><?= e($row['Companhias']) ?></td>
+<td><?= e($row['Nominativo'] ?: ($row['Seccao'] ?? '—')) ?></td>
 <td><?= (int)$row['Activo'] ? 'Activo' : 'Inactivo' ?></td>
 <td><a href="<?= e($config['app']['base_url']) ?>/associados/<?= (int)$row['Id'] ?>">Consultar</a></td>
 </tr>

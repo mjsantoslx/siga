@@ -150,7 +150,7 @@ A versão 9.0 normaliza a aplicação e a base de dados para UTF-8 / `utf8mb4`.
 - Correcção: a listagem de associados inclui explicitamente o campo `Numero`.
 
 
-**Versão:** 11.0
+**Versão:** 11.3
 
 ## Revisão 10.1
 
@@ -164,3 +164,27 @@ na listagem sem o erro `Undefined array key "Numero"`.
 - Chefia Nacional pode coexistir com outra companhia.
 - Secções: Colónia, Alcateia, Tribo Júnior, Tribo Sénior, Clã e Chefia.
 - Histórico de evolução de secção em `associados_seccoes`.
+
+## Versão 11.1
+
+- A tabela `seccoes` deixou de ter a flag `Activo`.
+- Foram adicionados `NominativoMasculino` e `NominativoFeminino`.
+- Colónia: Castor / Castora
+- Alcateia: Lobito / Lobita
+- Tribo Júnior: Escoteiro Júnior / Escoteira Júnior
+- Tribo Sénior: Escoteiro Sénior / Escoteira Sénior
+- Clã: Caminheiro / Caminheira
+- Chefia: Escoteiro Chefe / Escoteira Chefe
+
+## Versão 11.2
+
+- Correcção da obtenção e apresentação da secção actual.
+- O detalhe apresenta secção e nominativo.
+- A listagem apresenta secção/nominativo.
+- É possível criar associados sem companhia.
+
+## Versão 11.3
+
+- Data de nascimento introduzida no formato europeu `dd/mm/aaaa`.
+- Conversão interna para `YYYY-MM-DD` antes de gravar na MariaDB/MySQL.
+- Validação de datas reais.
