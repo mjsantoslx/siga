@@ -1,4 +1,4 @@
--- SIGA v12.3 - Criação da base de dados de raiz
+-- SIGA v12.4 - Criação da base de dados de raiz
 
 -- SIGA v6 - Criação da base de dados de raiz
 
@@ -121,7 +121,7 @@ CREATE TABLE `utilizadores`  (
 
 
 
--- SIGA v12.3 - Criação da base de dados de raiz
+-- SIGA v12.4 - Criação da base de dados de raiz
 
 -- ----------------------------
 -- Table structure for associados

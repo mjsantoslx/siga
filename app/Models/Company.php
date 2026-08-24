@@ -125,7 +125,7 @@ final class Company
         $cur=$this->currentAddress($id); $op=$data['Operacao']??'mudar';
         if($op==='corrigir'){
             if(!$cur) throw new \RuntimeException('Não existe morada actual para corrigir.');
-            $this->correctAddress((int)$cur['IdMorada'],$data); return;
+            $this->correctAddress((int)$cur['Id'],$data); return;
         }
         $m=trim((string)($data['Morada']??'')); $l=trim((string)($data['Localidade']??'')); $cp=trim((string)($data['CodPostal']??''));
         if($m===''||$l==='') throw new \RuntimeException('Morada e localidade são obrigatórias.');
