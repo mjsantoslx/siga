@@ -150,7 +150,7 @@ A versão 9.0 normaliza a aplicação e a base de dados para UTF-8 / `utf8mb4`.
 - Correcção: a listagem de associados inclui explicitamente o campo `Numero`.
 
 
-**Versão:** 11.8
+**Versão:** 11.9
 
 ## Revisão 10.1
 
@@ -227,3 +227,14 @@ na listagem sem o erro `Undefined array key "Numero"`.
 - Correcção da rota HTTP de reactivação de associados.
 - A rota `/associados/{id}/reactivar` passa a estar correctamente fora do bloco da rota de desactivação.
 - Não existem alterações ao schema da base de dados.
+
+## Versão 11.9
+
+- Alterado o modelo de dados de moradas para suportar histórico de moradas de associados e companhias.
+- `associados_moradas` passa a ter `Id`, `DataInicio`, `DataFim`, `Activo` e `DataHora`.
+- `companhias_moradas` passa a ter `Id`, `DataInicio`, `DataFim`, `Activo` e `DataHora`.
+- As tabelas de relacionamento passam a permitir múltiplas moradas históricas para a mesma entidade.
+- A morada actual é representada por `Activo=1` e `DataFim IS NULL`.
+- A migração preserva as relações existentes, considerando-as a morada actual a partir da data da migração.
+- Não foram alteradas as tabelas `moradas`.
+- Esta versão altera apenas o modelo de dados; a camada de aplicação será adaptada numa versão posterior.
