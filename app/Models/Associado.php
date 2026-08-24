@@ -190,26 +190,75 @@ final class Associado
             throw new \RuntimeException('Não tem permissão para alterar este associado.');
         }
 
-        $stmt = $this->db->prepare(
-            'UPDATE associados SET
-             Nome=:Nome, DNasc=:DNasc, IdGenero=:IdGenero,
-             CartaoCidadao=:CartaoCidadao, NIF=:NIF,
-             IdNacionalidade=:IdNacionalidade, Naturalidade=:Naturalidade,
-             Profissao=:Profissao, Habilitacoes=:Habilitacoes
-             WHERE Id=:Id'
-        );
-        $stmt->execute([
-            'Id' => $id,
-            'Nome' => trim($data['Nome']),
-            'DNasc' => $data['DNasc'],
-            'IdGenero' => (int)$data['IdGenero'],
-            'CartaoCidadao' => trim($data['CartaoCidadao']),
-            'NIF' => trim($data['NIF']),
-            'IdNacionalidade' => (int)$data['IdNacionalidade'],
-            'Naturalidade' => trim($data['Naturalidade']),
-            'Profissao' => trim($data['Profissao'] ?? ''),
-            'Habilitacoes' => trim($data['Habilitacoes'] ?? ''),
-        ]);
+        $sectionId = (int)($data['IdSeccao'] ?? 0);
+        if ($sectionId <= 0) {
+            throw new \RuntimeException('É obrigatório indicar a secção.');
+        }
+
+        $this->db->beginTransaction();
+        try {
+            $stmt = $this->db->prepare(
+                'UPDATE associados SET
+                 Nome=:Nome, DNasc=:DNasc, IdGenero=:IdGenero,
+                 CartaoCidadao=:CartaoCidadao, NIF=:NIF,
+                 IdNacionalidade=:IdNacionalidade, Naturalidade=:Naturalidade,
+                 Profissao=:Profissao, Habilitacoes=:Habilitacoes
+                 WHERE Id=:Id'
+            );
+            $stmt->execute([
+                'Id' => $id,
+                'Nome' => trim($data['Nome']),
+                'DNasc' => $data['DNasc'],
+                'IdGenero' => (int)$data['IdGenero'],
+                'CartaoCidadao' => trim($data['CartaoCidadao']),
+                'NIF' => trim($data['NIF']),
+                'IdNacionalidade' => (int)$data['IdNacionalidade'],
+                'Naturalidade' => trim($data['Naturalidade']),
+                'Profissao' => trim($data['Profissao'] ?? ''),
+                'Habilitacoes' => trim($data['Habilitacoes'] ?? ''),
+            ]);
+
+            $current = $this->db->prepare(
+                'SELECT Id, IdSeccao
+                 FROM associados_seccoes
+                 WHERE IdAssociado=:id AND Activo=1 AND DataFim IS NULL
+                 ORDER BY Id DESC LIMIT 1'
+            );
+            $current->execute(['id' => $id]);
+            $currentSection = $current->fetch();
+
+            if (!$currentSection || (int)$currentSection['IdSeccao'] !== $sectionId) {
+                $valid = $this->db->prepare(
+                    'SELECT Id FROM seccoes WHERE Id=:id'
+                );
+                $valid->execute(['id' => $sectionId]);
+                if (!$valid->fetch()) {
+                    throw new \RuntimeException('Secção inválida.');
+                }
+
+                $close = $this->db->prepare(
+                    'UPDATE associados_seccoes
+                     SET Activo=0, DataFim=NOW()
+                     WHERE IdAssociado=:id AND Activo=1 AND DataFim IS NULL'
+                );
+                $close->execute(['id' => $id]);
+
+                $insert = $this->db->prepare(
+                    'INSERT INTO associados_seccoes
+                     (IdAssociado, IdSeccao, DataInicio, DataFim, Activo)
+                     VALUES (:id, :section, NOW(), NULL, 1)'
+                );
+                $insert->execute([
+                    'id' => $id,
+                    'section' => $sectionId,
+                ]);
+            }
+
+            $this->db->commit();
+        } catch (\Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
     }
 
     public function deactivate(int $userId, int $id): void

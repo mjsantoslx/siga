@@ -15,16 +15,19 @@ $action = $associate
 
 <label>Data de nascimento</label>
 <input type="text" name="DNasc" id="DNasc"
-       value="<?= e($associado['DNasc'] ?? ($_POST['DNasc'] ?? '')) ?>"
+       value="<?= e(!empty($associate['DNasc']) ? date('d/m/Y', strtotime($associate['DNasc'])) : ($_POST['DNasc'] ?? '')) ?>"
        placeholder="dd/mm/aaaa"
        pattern="(?:0[1-9]|[12][0-9]|3[01])/(?:0[1-9]|1[0-2])/\d{4}"
-       inputmode="numeric" maxlength="10" required>" required>
+       inputmode="numeric" maxlength="10" required>
 
 <label>Secção</label>
 <select name="IdSeccao" required>
 <option value="">-- Seleccionar --</option>
 <?php foreach ($seccoes as $s): ?>
-<option value="<?= (int)$s['Id'] ?>"><?= e($s['Designacao']) ?></option>
+<option value="<?= (int)$s['Id'] ?>"
+    <?= ((int)($section['Id'] ?? ($_POST['IdSeccao'] ?? 0)) === (int)$s['Id']) ? 'selected' : '' ?>>
+    <?= e($s['Designacao']) ?>
+</option>
 <?php endforeach; ?>
 </select>
 

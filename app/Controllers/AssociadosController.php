@@ -118,6 +118,7 @@ final class AssociadosController extends Controller
             $this->formData(),
             [
                 'associate' => $associate,
+                'section' => $this->model()->currentSection($id),
                 'csrf' => Csrf::token(),
                 'error' => null,
             ]
@@ -131,6 +132,11 @@ final class AssociadosController extends Controller
         if (!Csrf::validate($_POST['_csrf'] ?? null)) {
             $_SESSION['_error'] = 'Pedido inválido.';
             $this->redirect("associados/{$id}/editar");
+        }
+
+        // Normaliza dd/mm/aaaa para YYYY-MM-DD também na edição.
+        if (!empty($_POST['DNasc']) && preg_match('/^(\\d{2})\\/(\\d{2})\\/(\\d{4})$/', $_POST['DNasc'], $m)) {
+            $_POST['DNasc'] = $m[3] . '-' . $m[2] . '-' . $m[1];
         }
 
         try {

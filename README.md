@@ -150,7 +150,7 @@ A versão 9.0 normaliza a aplicação e a base de dados para UTF-8 / `utf8mb4`.
 - Correcção: a listagem de associados inclui explicitamente o campo `Numero`.
 
 
-**Versão:** 11.3
+**Versão:** 11.4
 
 ## Revisão 10.1
 
@@ -188,3 +188,12 @@ na listagem sem o erro `Undefined array key "Numero"`.
 - Data de nascimento introduzida no formato europeu `dd/mm/aaaa`.
 - Conversão interna para `YYYY-MM-DD` antes de gravar na MariaDB/MySQL.
 - Validação de datas reais.
+
+## Versão 11.4
+
+- Correcção do formulário de edição de associados.
+- Data de nascimento carregada e apresentada em `dd/mm/aaaa`.
+- Secção actual carregada e seleccionada no formulário de edição.
+- Alteração de secção passa a manter o histórico em `associados_seccoes`.
+- Validação da secção durante a actualização.
+- Não existem alterações ao schema da base de dados.
