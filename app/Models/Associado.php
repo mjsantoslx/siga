@@ -297,6 +297,64 @@ final class Associado
         }
     }
 
+    public function canReactivate(int $userId, int $id): bool
+    {
+        if (!$this->authorization->canAccessInactiveAssociate($userId, $id)) {
+            return false;
+        }
+
+        $stmt = $this->db->prepare('SELECT Activo FROM associados WHERE Id=:id LIMIT 1');
+        $stmt->execute(['id' => $id]);
+        $active = $stmt->fetchColumn();
+        return $active !== false && (int)$active === 0;
+    }
+
+    public function reactivate(int $userId, int $id, int $companyId, int $sectionId): void
+    {
+        if (!$this->authorization->canAccessInactiveAssociate($userId, $id)) {
+            throw new \RuntimeException('Não tem permissão para reactivar este associado.');
+        }
+        if ($sectionId <= 0) {
+            throw new \RuntimeException('É obrigatório indicar a secção.');
+        }
+        if ($companyId > 0 && !$this->authorization->canManageAssociatesInCompany($userId, $companyId)) {
+            throw new \RuntimeException('Não tem permissão para reactivar o associado nessa companhia.');
+        }
+        if (!$this->authorization->isAdministrator($userId) && $companyId <= 0) {
+            throw new \RuntimeException('Um utilizador não administrador tem de indicar uma companhia.');
+        }
+
+        $this->db->beginTransaction();
+        try {
+            $stmt = $this->db->prepare('UPDATE associados SET Activo=1 WHERE Id=:id AND Activo=0');
+            $stmt->execute(['id' => $id]);
+            if ($stmt->rowCount() !== 1) {
+                throw new \RuntimeException('O associado já se encontra activo ou não existe.');
+            }
+
+            if ($companyId > 0) {
+                $link = $this->db->prepare(
+                    'INSERT INTO associados_companhias
+                     (IdAssociado, IdCompanhia, DataInicio, DataFim, Activo)
+                     VALUES (:id, :company, NOW(), NULL, 1)'
+                );
+                $link->execute(['id' => $id, 'company' => $companyId]);
+            }
+
+            $section = $this->db->prepare(
+                'INSERT INTO associados_seccoes
+                 (IdAssociado, IdSeccao, DataInicio, DataFim, Activo)
+                 VALUES (:id, :section, NOW(), NULL, 1)'
+            );
+            $section->execute(['id' => $id, 'section' => $sectionId]);
+
+            $this->db->commit();
+        } catch (\Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+    }
+
     public function healthForUser(int $userId, int $id): ?array
     {
         if (!$this->authorization->canAccessAssociate($userId, $id)) {

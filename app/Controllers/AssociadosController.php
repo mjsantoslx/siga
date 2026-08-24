@@ -189,6 +189,57 @@ final class AssociadosController extends Controller
         ]);
     }
 
+    public function reactivate(int $id): void
+    {
+        $this->requireLogin();
+        $model = $this->model();
+
+        $db = Database::connection($this->config);
+        $stmt = $db->prepare('SELECT * FROM associados WHERE Id=:id LIMIT 1');
+        $stmt->execute(['id' => $id]);
+        $associate = $stmt->fetch();
+
+        if (!$associate || !$model->canReactivate(Auth::id(), $id)) {
+            http_response_code(403);
+            exit('403 - Acesso não autorizado');
+        }
+
+        if ((int)$associate['Activo'] === 1) {
+            $this->redirect("associados/{$id}");
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Csrf::validate($_POST['_csrf'] ?? null)) {
+                $_SESSION['_error'] = 'Pedido inválido.';
+                $this->redirect("associados/{$id}/reactivar");
+            }
+
+            try {
+                $model->reactivate(
+                    Auth::id(),
+                    $id,
+                    (int)($_POST['IdCompanhia'] ?? 0),
+                    (int)($_POST['IdSeccao'] ?? 0)
+                );
+                $this->redirect("associados/{$id}");
+            } catch (\Throwable $e) {
+                Logger::error("Erro ao reactivar associado {$id}.", $e);
+                $_SESSION['_error'] = $e->getMessage();
+                $this->redirect("associados/{$id}/reactivar");
+            }
+        }
+
+        $this->view('associados/reactivate', array_merge(
+            $this->formData(),
+            [
+                'associate' => $associate,
+                'csrf' => Csrf::token(),
+                'error' => $_SESSION['_error'] ?? null,
+            ]
+        ));
+        unset($_SESSION['_error']);
+    }
+
     public function health(int $id): void
     {
         $this->requireLogin();

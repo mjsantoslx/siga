@@ -136,6 +136,22 @@ final class Authorization
         return (bool)$stmt->fetchColumn();
     }
 
+    public function canAccessInactiveAssociate(int $userId, int $associateId): bool
+    {
+        $scope = $this->getScope($userId);
+        if ($scope['global']) return true;
+        if (!$scope['companies']) return false;
+
+        $ph = implode(',', array_fill(0, count($scope['companies']), '?'));
+        $stmt = $this->db->prepare(
+            "SELECT 1 FROM associados_companhias
+             WHERE IdAssociado = ? AND IdCompanhia IN ($ph)
+             LIMIT 1"
+        );
+        $stmt->execute(array_merge([$associateId], $scope['companies']));
+        return (bool)$stmt->fetchColumn();
+    }
+
     public function associateFilter(int $userId, string $column = 'a.Id'): array
     {
         $scope = $this->getScope($userId);

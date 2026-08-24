@@ -14,7 +14,7 @@
     <button type="submit" class="button">Inactivar associado</button>
 </form>
 <?php else: ?>
-<span class="button" aria-disabled="true">Associado inactivo</span>
+<a class="button" href="<?= e($config['app']['base_url']) ?>/associados/<?= (int)$associate['Id'] ?>/reactivar">Reactivar associado</a>
 <?php endif; ?>
 </p>
 <table>
