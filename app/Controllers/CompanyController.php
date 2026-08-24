@@ -116,7 +116,7 @@ final class CompanyController extends Controller
             catch(\Throwable $e){Logger::error("Erro ao alterar morada da companhia {$id}.",$e);$_SESSION['_error']=$e->getMessage();}
         }
         $this->view('companhias/address',['company'=>$company,'address'=>$this->model()->currentAddress($id),
-            'addressUsage'=>$this->model()->currentAddress($id) ? $this->model()->addressUsageCount((int)$this->model()->currentAddress($id)['IdMorada']) : 0,'addressHistory'=>$this->model()->addressHistory($id),'csrf'=>Csrf::token(),'error'=>$_SESSION['_error']??null]);
+            'addressUsage'=>$this->model()->currentAddress($id) ? $this->model()->addressUsageCount((int)$this->model()->currentAddress($id)['Id']) : 0,'addressHistory'=>$this->model()->addressHistory($id),'csrf'=>Csrf::token(),'error'=>$_SESSION['_error']??null]);
         unset($_SESSION['_error']);
     }
 

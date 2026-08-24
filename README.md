@@ -150,7 +150,7 @@ A versão 9.0 normaliza a aplicação e a base de dados para UTF-8 / `utf8mb4`.
 - Correcção: a listagem de associados inclui explicitamente o campo `Numero`.
 
 
-**Versão:** 12.2
+**Versão:** 12.3
 
 ## Revisão 10.1
 
@@ -262,4 +262,10 @@ na listagem sem o erro `Undefined array key "Numero"`.
 - Corrigir altera a entidade existente em `moradas` e afecta todas as entidades que partilhem essa morada.
 - Mudar cria uma nova entidade em `moradas` e uma nova relação histórica apenas para a entidade que muda.
 - A interface informa quando uma morada está partilhada.
+- Não existem alterações ao schema da base de dados.
+
+## Versão 12.3
+
+- Correcção da gestão de moradas: corrigida a referência ao identificador da entidade `moradas`.
+- A consulta da morada actual devolve o identificador como `Id`; os controladores passam agora a utilizar esse campo correctamente.
 - Não existem alterações ao schema da base de dados.
