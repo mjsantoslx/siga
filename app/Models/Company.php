@@ -95,6 +95,20 @@ final class Company
         ]);
     }
 
+    public function addressUsageCount(int $moradaId): int
+    {
+        $s=$this->db->prepare('SELECT COUNT(*) FROM companhias_moradas WHERE IdMorada=:id AND Activo=1 AND DataFim IS NULL');
+        $s->execute(['id'=>$moradaId]); return (int)$s->fetchColumn();
+    }
+
+    public function correctAddress(int $moradaId,array $data): void
+    {
+        $m=trim((string)($data['Morada']??'')); $l=trim((string)($data['Localidade']??'')); $cp=trim((string)($data['CodPostal']??''));
+        if($m===''||$l==='') throw new \RuntimeException('Morada e localidade são obrigatórias.');
+        $s=$this->db->prepare('UPDATE moradas SET Morada=:m,Localidade=:l,CodPostal=:cp WHERE Id=:id');
+        $s->execute(['m'=>$m,'l'=>$l,'cp'=>$cp!==''?$cp:null,'id'=>$moradaId]);
+    }
+
     public function currentAddress(int $id): ?array
     {
         $s=$this->db->prepare('SELECT m.*,cm.Id AS IdCompanhiaMorada,cm.DataInicio,cm.DataFim,cm.Activo FROM companhias_moradas cm INNER JOIN moradas m ON m.Id=cm.IdMorada WHERE cm.IdCompanhia=:id AND cm.Activo=1 AND cm.DataFim IS NULL ORDER BY cm.Id DESC LIMIT 1');
@@ -107,20 +121,23 @@ final class Company
     }
     public function saveAddress(int $id,array $data): void
     {
-        $company=$this->find($id);
-        if(!$company) throw new \RuntimeException('Companhia inexistente.');
-        $m=trim((string)($data['Morada']??''));$l=trim((string)($data['Localidade']??''));$cp=trim((string)($data['CodPostal']??''));
+        $company=$this->find($id); if(!$company) throw new \RuntimeException('Companhia inexistente.');
+        $cur=$this->currentAddress($id); $op=$data['Operacao']??'mudar';
+        if($op==='corrigir'){
+            if(!$cur) throw new \RuntimeException('Não existe morada actual para corrigir.');
+            $this->correctAddress((int)$cur['IdMorada'],$data); return;
+        }
+        $m=trim((string)($data['Morada']??'')); $l=trim((string)($data['Localidade']??'')); $cp=trim((string)($data['CodPostal']??''));
         if($m===''||$l==='') throw new \RuntimeException('Morada e localidade são obrigatórias.');
         $this->db->beginTransaction();
         try{
-            $cur=$this->currentAddress($id);
-            if($cur&&$cur['Morada']===$m&&$cur['Localidade']===$l&&($cur['CodPostal']??'')===$cp){$this->db->commit();return;}
-            $s=$this->db->prepare('INSERT INTO moradas (Morada,Localidade,IdConcelho,IdDistrito,CodPostal) VALUES (:m,:l,NULL,NULL,:cp)');
-            $s->execute(['m'=>$m,'l'=>$l,'cp'=>$cp!==''?$cp:null]);$mid=(int)$this->db->lastInsertId();
-            if($cur){$s=$this->db->prepare('UPDATE companhias_moradas SET Activo=0,DataFim=NOW() WHERE Id=:id');$s->execute(['id'=>$cur['IdCompanhiaMorada']]);}
-            $s=$this->db->prepare('INSERT INTO companhias_moradas (IdCompanhia,IdMorada,DataInicio,DataFim,Activo) VALUES (:c,:m,NOW(),NULL,1)');
-            $s->execute(['c'=>$id,'m'=>$mid]);$this->db->commit();
-        }catch(\Throwable $e){$this->db->rollBack();throw $e;}
+            if($cur && $cur['Morada']===$m && $cur['Localidade']===$l && ($cur['CodPostal']??'')===$cp){$this->db->commit();return;}
+            $q=$this->db->prepare('INSERT INTO moradas (Morada,Localidade,IdConcelho,IdDistrito,CodPostal) VALUES (:m,:l,NULL,NULL,:cp)');
+            $q->execute(['m'=>$m,'l'=>$l,'cp'=>$cp!==''?$cp:null]); $mid=(int)$this->db->lastInsertId();
+            if($cur){$q=$this->db->prepare('UPDATE companhias_moradas SET Activo=0,DataFim=NOW() WHERE Id=:id');$q->execute(['id'=>$cur['IdCompanhiaMorada']]);}
+            $q=$this->db->prepare('INSERT INTO companhias_moradas (IdCompanhia,IdMorada,DataInicio,DataFim,Activo) VALUES (:c,:m,NOW(),NULL,1)');
+            $q->execute(['c'=>$id,'m'=>$mid]); $this->db->commit();
+        }catch(\Throwable $x){$this->db->rollBack();throw $x;}
     }
 
     public function deactivate(int $id): void

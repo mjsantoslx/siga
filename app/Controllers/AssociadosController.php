@@ -252,7 +252,8 @@ final class AssociadosController extends Controller
             try{$model->saveAddress(Auth::id(),$id,$_POST);$this->redirect("associados/{$id}");}
             catch(\Throwable $e){Logger::error("Erro ao alterar morada do associado {$id}.",$e);$_SESSION['_error']=$e->getMessage();}
         }
-        $this->view('associados/address',['associate'=>$associate,'address'=>$model->currentAddress($id),'csrf'=>Csrf::token(),'error'=>$_SESSION['_error']??null]);
+        $this->view('associados/address',['associate'=>$associate,'address'=>$model->currentAddress($id),
+            'addressUsage'=>$model->currentAddress($id) ? $model->addressUsageCount((int)$model->currentAddress($id)['IdMorada']) : 0,'csrf'=>Csrf::token(),'error'=>$_SESSION['_error']??null]);
         unset($_SESSION['_error']);
     }
 

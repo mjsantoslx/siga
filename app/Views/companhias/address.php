@@ -3,6 +3,14 @@
 <?php if($error ?? null): ?><div class="alert"><?= e($error) ?></div><?php endif; ?>
 <form method="post" action="<?= e($config['app']['base_url']) ?>/companhias/<?= (int)$company['Id'] ?>/morada">
 <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
+<?php if ($address): ?>
+<p><strong>Operação</strong></p>
+<label><input type="radio" name="Operacao" value="corrigir" checked> Corrigir esta morada</label>
+<?php if (($addressUsage ?? 1) > 1): ?><p class="alert">Esta morada está actualmente associada a <?= (int)$addressUsage ?> entidades. A correcção será aplicada a todas.</p><?php endif; ?>
+<label><input type="radio" name="Operacao" value="mudar"> Mudar de morada</label>
+<?php else: ?>
+<input type="hidden" name="Operacao" value="mudar">
+<?php endif; ?>
 <label>Morada</label><input name="Morada" maxlength="150" value="<?= e($address['Morada']??($_POST['Morada']??'')) ?>" required>
 <label>Localidade</label><input name="Localidade" maxlength="50" value="<?= e($address['Localidade']??($_POST['Localidade']??'')) ?>" required>
 <label>Código Postal</label><input name="CodPostal" maxlength="8" placeholder="0000-000" value="<?= e($address['CodPostal']??($_POST['CodPostal']??'')) ?>">
