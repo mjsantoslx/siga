@@ -7,7 +7,7 @@
 <a class="button" href="<?= e($config['app']['base_url']) ?>/associados/<?= (int)$associate['Id'] ?>/saude">Ficha de saúde</a>
 
 <form method="post"
-      action="<?= e($config['app']['base_url']) ?>/associados/<?= (int)$associate['Id'] ?>/inactivar"
+      action="<?= e($config['app']['base_url']) ?>/associados/<?= (int)$associate['Id'] ?>/desactivar"
       style="display:inline"
       onsubmit="return confirm('Tem a certeza de que pretende inactivar o associado <?= e($associate['Numero']) ?> — <?= e($associate['Nome']) ?>?\n\nOs dados não serão eliminados. As relações activas com companhias e a secção actual serão encerradas e ficarão no histórico.');">
     <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">

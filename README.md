@@ -150,7 +150,7 @@ A versão 9.0 normaliza a aplicação e a base de dados para UTF-8 / `utf8mb4`.
 - Correcção: a listagem de associados inclui explicitamente o campo `Numero`.
 
 
-**Versão:** 11.5
+**Versão:** 11.6
 
 ## Revisão 10.1
 
@@ -206,4 +206,10 @@ na listagem sem o erro `Undefined array key "Numero"`.
 - As relações activas com companhias são encerradas e mantidas no histórico.
 - A secção actual também é encerrada e mantida no histórico.
 - Um associado já inactivo apresenta o estado **Associado inactivo** em vez do botão de inactivação.
+- Não existem alterações ao schema da base de dados.
+
+## Versão 11.6
+
+- Correcção da rota de inactivação/desactivação de associados.
+- O formulário passa a utilizar a rota `/associados/{id}/desactivar`, que é a rota registada pelo router.
 - Não existem alterações ao schema da base de dados.
