@@ -3,7 +3,7 @@
         'name' => 'siga/siga-mvc',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '8e5ca05a5dcd6ed0dc6bb5e9dfe4fa06563e0c7a',
+        'reference' => '5dfa510fe2f42eb1dfe43612adcb0687da408e76',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'siga/siga-mvc' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '8e5ca05a5dcd6ed0dc6bb5e9dfe4fa06563e0c7a',
+            'reference' => '5dfa510fe2f42eb1dfe43612adcb0687da408e76',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

@@ -150,7 +150,7 @@ A versão 9.0 normaliza a aplicação e a base de dados para UTF-8 / `utf8mb4`.
 - Correcção: a listagem de associados inclui explicitamente o campo `Numero`.
 
 
-**Versão:** 12.4
+**Versão:** 13.0
 
 ## Revisão 10.1
 
@@ -276,3 +276,15 @@ na listagem sem o erro `Undefined array key "Numero"`.
 - Corrigida a referência ao identificador da entidade `moradas` nos modelos de associados e companhias.
 - A correcção passa agora a actualizar efectivamente o registo da morada existente.
 - Não existem alterações ao schema da base de dados.
+
+## Versão 13.0
+
+- Implementada a gestão de eventos na ficha de cada associado.
+- Os eventos usam a tabela existente `eventos_associados`.
+- Os tipos de evento são obtidos de `tipos_evento` e permanecem destinados ao backoffice.
+- É possível criar e editar eventos.
+- Os eventos não têm operação de eliminação.
+- A listagem é ordenada por data decrescente.
+- As datas dos eventos são introduzidas e apresentadas no formato europeu `dd/mm/aaaa`.
+- O histórico de eventos é preservado quando um associado é desactivado.
+- Não existem alterações ao schema da base de dados nesta versão.

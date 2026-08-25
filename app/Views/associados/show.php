@@ -49,6 +49,24 @@
 <table><thead><tr><th>Morada</th><th>Localidade</th><th>Código Postal</th><th>Início</th><th>Fim</th><th>Estado</th></tr></thead><tbody>
 <?php foreach($addressHistory as $a): ?><tr><td><?= e($a['Morada']) ?></td><td><?= e($a['Localidade']) ?></td><td><?= e($a['CodPostal']) ?></td><td><?= e($a['DataInicio']) ?></td><td><?= e($a['DataFim']??'') ?></td><td><?= (int)$a['Activo']?'Actual':'Histórica' ?></td></tr><?php endforeach; ?>
 </tbody></table>
+<h2>Eventos</h2>
+<p><a class="button" href="<?= e($config['app']['base_url']) ?>/associados/<?= (int)$associate['Id'] ?>/eventos/novo">+ Novo evento</a></p>
+<?php if ($events): ?>
+<table>
+<thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Acção</th></tr></thead>
+<tbody>
+<?php foreach ($events as $event): ?>
+<tr>
+<td><?= e(date('d/m/Y', strtotime($event['DataEvento']))) ?></td>
+<td><?= e($event['TipoEvento'] ?? '—') ?></td>
+<td><?= nl2br(e($event['Descricao'])) ?></td>
+<td><a href="<?= e($config['app']['base_url']) ?>/associados/<?= (int)$associate['Id'] ?>/eventos/<?= (int)$event['Id'] ?>/editar">Editar</a></td>
+</tr>
+<?php endforeach; ?>
+</tbody>
+</table>
+<?php else: ?><p>Não existem eventos registados.</p><?php endif; ?>
+
 <h2>Ficha de saúde actual</h2>
 <?php if ($health): ?>
 <table>

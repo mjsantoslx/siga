@@ -401,6 +401,92 @@ final class Associado
         }catch(\Throwable $x){$this->db->rollBack();throw $x;}
     }
 
+    public function eventTypes(): array
+    {
+        $s=$this->db->query('SELECT Id, Designacao FROM tipos_evento ORDER BY Designacao');
+        return $s->fetchAll();
+    }
+
+    public function eventsForUser(int $userId,int $id): array
+    {
+        if(!$this->authorization->canAccessAssociate($userId,$id)) return [];
+        $s=$this->db->prepare(
+            'SELECT e.Id,e.IdAssociado,e.Descricao,e.DataEvento,e.IdTipoEvento,
+                    t.Designacao AS TipoEvento
+             FROM eventos_associados e
+             LEFT JOIN tipos_evento t ON t.Id=e.IdTipoEvento
+             WHERE e.IdAssociado=:id
+             ORDER BY e.DataEvento DESC,e.Id DESC'
+        );
+        $s->execute(['id'=>$id]); return $s->fetchAll();
+    }
+
+    public function eventForUser(int $userId,int $eventId): ?array
+    {
+        $s=$this->db->prepare(
+            'SELECT e.*,t.Designacao AS TipoEvento
+             FROM eventos_associados e
+             LEFT JOIN tipos_evento t ON t.Id=e.IdTipoEvento
+             INNER JOIN associados a ON a.Id=e.IdAssociado
+             WHERE e.Id=:eventId'
+        );
+        $s->execute(['eventId'=>$eventId]);
+        $event=$s->fetch();
+        if(!$event || !$this->authorization->canAccessAssociate($userId,(int)$event['IdAssociado'])) return null;
+        return $event;
+    }
+
+    public function createEvent(int $userId,int $associateId,array $data): void
+    {
+        if(!$this->authorization->canAccessAssociate($userId,$associateId))
+            throw new \RuntimeException('Não tem permissão para alterar este associado.');
+
+        $date=$this->normaliseEventDate((string)($data['DataEvento']??''));
+        $type=(int)($data['IdTipoEvento']??0);
+        $description=trim((string)($data['Descricao']??''));
+        if($date===null) throw new \RuntimeException('A data do evento é obrigatória e deve estar no formato dd/mm/aaaa.');
+        if($description==='') throw new \RuntimeException('A descrição do evento é obrigatória.');
+
+        $s=$this->db->prepare(
+            'INSERT INTO eventos_associados (IdAssociado,Descricao,DataEvento,IdTipoEvento)
+             VALUES (:associado,:descricao,:data,:tipo)'
+        );
+        $s->execute([
+            'associado'=>$associateId,'descricao'=>$description,'data'=>$date,
+            'tipo'=>$type>0?$type:null
+        ]);
+    }
+
+    public function updateEvent(int $userId,int $eventId,array $data): void
+    {
+        $event=$this->eventForUser($userId,$eventId);
+        if(!$event) throw new \RuntimeException('Evento não encontrado ou sem permissão de acesso.');
+
+        $date=$this->normaliseEventDate((string)($data['DataEvento']??''));
+        $type=(int)($data['IdTipoEvento']??0);
+        $description=trim((string)($data['Descricao']??''));
+        if($date===null) throw new \RuntimeException('A data do evento é obrigatória e deve estar no formato dd/mm/aaaa.');
+        if($description==='') throw new \RuntimeException('A descrição do evento é obrigatória.');
+
+        $s=$this->db->prepare(
+            'UPDATE eventos_associados
+             SET Descricao=:descricao,DataEvento=:data,IdTipoEvento=:tipo
+             WHERE Id=:id'
+        );
+        $s->execute([
+            'descricao'=>$description,'data'=>$date,'tipo'=>$type>0?$type:null,'id'=>$eventId
+        ]);
+    }
+
+    private function normaliseEventDate(string $value): ?string
+    {
+        $value=trim($value);
+        if($value==='') return null;
+        $d=\DateTime::createFromFormat('!d/m/Y',$value);
+        if(!$d || $d->format('d/m/Y')!==$value) return null;
+        return $d->format('Y-m-d');
+    }
+
     public function healthForUser(int $userId, int $id): ?array
     {
         if (!$this->authorization->canAccessAssociate($userId, $id)) {

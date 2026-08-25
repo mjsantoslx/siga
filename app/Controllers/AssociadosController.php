@@ -187,8 +187,75 @@ final class AssociadosController extends Controller
             'address' => $model->currentAddress($id),
             'addressHistory' => $model->addressHistory(Auth::id(), $id),
             'healthHistory' => $model->healthHistory(Auth::id(), $id),
+            'events' => $model->eventsForUser(Auth::id(), $id),
             'csrf' => Csrf::token(),
         ]);
+    }
+
+    public function eventNew(int $id): void
+    {
+        $this->requireLogin();
+        $model=$this->model();
+        $associate=$model->findForUser(Auth::id(),$id);
+        if(!$associate){http_response_code(403);exit('403 - Acesso não autorizado');}
+
+        if($_SERVER['REQUEST_METHOD']==='POST'){
+            if(!Csrf::validate($_POST['_csrf']??null)){
+                $_SESSION['_error']='Pedido inválido.';
+                $this->redirect("associados/{$id}/eventos/novo");
+            }
+            try{
+                $model->createEvent(Auth::id(),$id,$_POST);
+                $this->redirect("associados/{$id}");
+            }catch(\Throwable $e){
+                Logger::error("Erro ao criar evento do associado {$id}.",$e);
+                $_SESSION['_error']=$e->getMessage();
+            }
+        }
+
+        $this->view('associados/event_form',[
+            'associate'=>$associate,
+            'event'=>null,
+            'eventTypes'=>$model->eventTypes(),
+            'csrf'=>Csrf::token(),
+            'error'=>$_SESSION['_error']??null
+        ]);
+        unset($_SESSION['_error']);
+    }
+
+    public function eventEdit(int $id,int $eventId): void
+    {
+        $this->requireLogin();
+        $model=$this->model();
+        $event=$model->eventForUser(Auth::id(),$eventId);
+        if(!$event || (int)$event['IdAssociado']!==$id){
+            http_response_code(404); exit('404 - Evento não encontrado');
+        }
+        $associate=$model->findForUser(Auth::id(),$id);
+        if(!$associate){http_response_code(403);exit('403 - Acesso não autorizado');}
+
+        if($_SERVER['REQUEST_METHOD']==='POST'){
+            if(!Csrf::validate($_POST['_csrf']??null)){
+                $_SESSION['_error']='Pedido inválido.';
+                $this->redirect("associados/{$id}/eventos/{$eventId}/editar");
+            }
+            try{
+                $model->updateEvent(Auth::id(),$eventId,$_POST);
+                $this->redirect("associados/{$id}");
+            }catch(\Throwable $e){
+                Logger::error("Erro ao alterar evento {$eventId} do associado {$id}.",$e);
+                $_SESSION['_error']=$e->getMessage();
+            }
+        }
+
+        $this->view('associados/event_form',[
+            'associate'=>$associate,
+            'event'=>$event,
+            'eventTypes'=>$model->eventTypes(),
+            'csrf'=>Csrf::token(),
+            'error'=>$_SESSION['_error']??null
+        ]);
+        unset($_SESSION['_error']);
     }
 
     public function reactivate(int $id): void

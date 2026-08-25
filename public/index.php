@@ -52,6 +52,14 @@ if (preg_match('#^/associados/(\\d+)/reactivar$#', $uri, $m)) {
     $associados->reactivate((int)$m[1]);
     exit;
 }
+if (preg_match('#^/associados/(\d+)/eventos/novo$#', $uri, $m)) {
+    $associados->eventNew((int)$m[1]);
+    exit;
+}
+if (preg_match('#^/associados/(\d+)/eventos/(\d+)/editar$#', $uri, $m)) {
+    $associados->eventEdit((int)$m[1], (int)$m[2]);
+    exit;
+}
 if (preg_match('#^/associados/(\\d+)/morada$#', $uri, $m)) {
     $associados->address((int)$m[1]);
     exit;
