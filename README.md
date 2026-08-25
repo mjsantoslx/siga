@@ -150,7 +150,7 @@ A versão 9.0 normaliza a aplicação e a base de dados para UTF-8 / `utf8mb4`.
 - Correcção: a listagem de associados inclui explicitamente o campo `Numero`.
 
 
-**Versão:** 13.0
+**Versão:** 13.1
 
 ## Revisão 10.1
 
@@ -288,3 +288,10 @@ na listagem sem o erro `Undefined array key "Numero"`.
 - As datas dos eventos são introduzidas e apresentadas no formato europeu `dd/mm/aaaa`.
 - O histórico de eventos é preservado quando um associado é desactivado.
 - Não existem alterações ao schema da base de dados nesta versão.
+
+## Versão 13.1
+
+- Correcção da localização do ficheiro `config.php`.
+- O ficheiro canónico encontra-se em `config/config.php`, conforme esperado pelo `public/index.php`.
+- O conteúdo do `config.php` foi restaurado a partir do ficheiro de configuração canónico.
+- Não existem alterações ao modelo de dados.
