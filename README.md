@@ -1,3 +1,40 @@
+SIGA V14.1
+
+Pacote de instalação para uma BASE DE DADOS NOVA.
+
+Conteúdo:
+- Código completo da aplicação SIGA V14.1
+- config/config.php
+- database/SIGA_V14.1_Criacao_BD.sql
+
+IMPORTANTE:
+Esta versão pressupõe uma instalação limpa. Não contém scripts de migração,
+porque as alterações estruturais do modelo de dados tornam inadequada a migração
+incremental a partir das versões anteriores.
+
+O script de criação recria integralmente a base de dados SIGA.
+
+---
+
+# SIGA V14.1
+
+Versão adaptada ao modelo de dados V14.
+
+## Instalação limpa
+1. Configure `config/config.php` para o seu ambiente.
+2. Execute `database/SIGA_V14_Modelo_Dados.sql` numa instalação MariaDB compatível com `utf8mb4_uca1400_as_ci`.
+3. O script recria integralmente a base de dados `siga`.
+
+## Revisão de compatibilidade realizada
+- `pessoas.Nome` utilizado em vez de `associados.Nome`;
+- ligações de secções normalizadas para `associados_secoes`;
+- moradas de associados adaptadas para `pessoas_moradas`;
+- eventos adaptados para `Observacoes`;
+- tabelas de utilizadores, saúde e consentimentos mantidas;
+- tabelas de apoio adaptadas ao modelo V14;
+- tipo de evento `Admissão` criado no arranque;
+- `Chefia Nacional` criada como companhia de âmbito global.
+
 # SIGA — Sistema de Gestão de Associados
 
 **Versão: 5.0**

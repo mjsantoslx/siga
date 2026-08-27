@@ -91,10 +91,12 @@ CREATE TABLE pessoas (
 CREATE TABLE moradas (
     Id INT NOT NULL AUTO_INCREMENT,
     Morada VARCHAR(200) NOT NULL,
-    CodigoPostal VARCHAR(20) NULL,
+    CodPostal VARCHAR(20) NULL,
+    IdConcelho INT NULL,
+    IdDistrito INT NULL,
     Localidade VARCHAR(100) NULL,
     PRIMARY KEY (Id),
-    KEY ix_moradas_codigo_postal (CodigoPostal),
+    KEY ix_moradas_codigo_postal (CodPostal),
     KEY ix_moradas_localidade (Localidade)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
@@ -420,11 +422,15 @@ VALUES
     ('Telefone'),
     ('Email');
 
+-- Companhia de âmbito nacional, protegida da alteração estrutural.
+INSERT INTO companhias (Designacao, ambito_global, Activo)
+VALUES ('Chefia Nacional', 1, 1);
+
 -- Confissão religiosa: tabela intencionalmente criada sem valores obrigatórios
 -- para posterior gestão no backoffice.
 
--- Tipos de evento: tabela intencionalmente criada para gestão no backoffice.
--- Recomenda-se criar pelo menos o tipo "Admissão" antes de utilização da aplicação.
+-- Tipo base obrigatório para a criação de associados. Os restantes são geridos no backoffice.
+INSERT INTO tipos_evento (Designacao) VALUES ('Admissão');
 
 
 
