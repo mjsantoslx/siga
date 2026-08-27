@@ -11,7 +11,25 @@ use App\Controllers\{
     LookupController
 };
 
-require dirname(__DIR__) . '/vendor/autoload.php';
+// Carrega o autoloader do Composer quando disponível.
+// Para instalações WAMP sem a pasta vendor, usa um autoloader PSR-4 interno.
+$autoload = dirname(__DIR__) . '/vendor/autoload.php';
+if (is_file($autoload)) {
+    require $autoload;
+} else {
+    spl_autoload_register(static function (string $class): void {
+        $prefix = 'App\\';
+        if (!str_starts_with($class, $prefix)) {
+            return;
+        }
+        $relative = substr($class, strlen($prefix));
+        $file = dirname(__DIR__) . '/app/' . str_replace('\\', '/', $relative) . '.php';
+        if (is_file($file)) {
+            require $file;
+        }
+    });
+}
+
 
 $config = require dirname(__DIR__) . '/config/config.php';
 Auth::start($config);
