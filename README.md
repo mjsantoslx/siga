@@ -360,3 +360,8 @@ Adaptação inicial dos formulários de associados ao modelo de dados V14:
 - evento de Admissão criado quando o tipo correspondente existe.
 
 O ficheiro `config/config.php` foi preservado da V13.3.
+
+
+## Dados iniciais da base de dados
+
+O script `database/SIGA_V14.1_Criacao_BD.sql` cria a base de dados de raiz e inclui dados iniciais para as tabelas de referência necessárias à aplicação, incluindo uma lista internacional de nacionalidades. Não existem scripts de migração neste pacote.
