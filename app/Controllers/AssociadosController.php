@@ -73,6 +73,7 @@ final class AssociadosController extends Controller
                 'csrf' => Csrf::token(),
                 'error' => null,
                 'companies' => $companies,
+                'dataInscricao' => date('d/m/Y'),
             ]
         ));
     }
@@ -92,6 +93,10 @@ final class AssociadosController extends Controller
         // Normaliza dd/mm/aaaa para YYYY-MM-DD.
         if (!empty($_POST['DNasc']) && preg_match('/^(\\d{2})\\/(\\d{2})\\/(\\d{4})$/', $_POST['DNasc'], $m)) {
             $_POST['DNasc'] = $m[3] . '-' . $m[2] . '-' . $m[1];
+        }
+
+        if (!empty($_POST['DataInscricao']) && preg_match('/^(\d{2})\/(\d{2})\/(\d{4})$/', $_POST['DataInscricao'], $m)) {
+            $_POST['DataInscricao'] = $m[3] . '-' . $m[2] . '-' . $m[1];
         }
 
         try {

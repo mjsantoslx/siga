@@ -84,6 +84,14 @@ final class Associado
         return $stmt->fetch() ?: null;
     }
 
+    private function normaliseCartaoCidadao(string $value): string
+    {
+        $value=trim($value);
+        if($value==='' || !ctype_digit($value) || strlen($value)>8)
+            throw new \RuntimeException('O número do Cartão de Cidadão deve conter apenas algarismos e ter no máximo 8 dígitos.');
+        return str_pad($value,8,'0',STR_PAD_LEFT);
+    }
+
     public function create(int $userId, array $data, int $companyId, int $sectionId): int
     {
         if ($companyId > 0 && !$this->authorization->canManageAssociatesInCompany($userId, $companyId)) {
@@ -92,6 +100,11 @@ final class Associado
         if ($sectionId <= 0) {
             throw new \RuntimeException('É obrigatório indicar a secção.');
         }
+
+        $inscricao = trim((string)($data['DataInscricao'] ?? ''));
+        $d = \DateTime::createFromFormat('!Y-m-d', $inscricao);
+        $today = new \DateTime('today');
+        if (!$d || $d->format('Y-m-d') !== $inscricao || $d > $today) throw new \RuntimeException('A data de inscrição é obrigatória, válida e não pode ser posterior à data actual.');
 
         $this->db->beginTransaction();
         try {
@@ -105,14 +118,14 @@ final class Associado
             $stmt=$this->db->prepare(
                 'INSERT INTO associados
                 (Numero,Nome,DNasc,IdGenero,CartaoCidadao,NIF,IdNacionalidade,Naturalidade,Profissao,Habilitacoes,DataRegisto,Activo)
-                VALUES (:Numero,:Nome,:DNasc,:IdGenero,:CartaoCidadao,:NIF,:IdNacionalidade,:Naturalidade,:Profissao,:Habilitacoes,CURDATE(),1)'
+                VALUES (:Numero,:Nome,:DNasc,:IdGenero,:CartaoCidadao,:NIF,:IdNacionalidade,:Naturalidade,:Profissao,:Habilitacoes,:DataRegisto,1)'
             );
             $stmt->execute([
                 'Numero'=>$numero,'Nome'=>trim($data['Nome']),'DNasc'=>$data['DNasc'],
-                'IdGenero'=>(int)$data['IdGenero'],'CartaoCidadao'=>trim($data['CartaoCidadao']),
+                'IdGenero'=>(int)$data['IdGenero'],'CartaoCidadao'=>$this->normaliseCartaoCidadao((string)$data['CartaoCidadao']),
                 'NIF'=>trim($data['NIF']),'IdNacionalidade'=>(int)$data['IdNacionalidade'],
                 'Naturalidade'=>trim($data['Naturalidade']),'Profissao'=>trim($data['Profissao']??''),
-                'Habilitacoes'=>trim($data['Habilitacoes']??'')
+                'Habilitacoes'=>trim($data['Habilitacoes']??''),'DataRegisto'=>$inscricao
             ]);
             $associateId=(int)$this->db->lastInsertId();
 
@@ -129,7 +142,12 @@ final class Associado
                  VALUES (:associado,:seccao,NOW(),NULL,1)'
             );
             $section->execute(['associado'=>$associateId,'seccao'=>$sectionId]);
-
+            $type=$this->db->prepare('SELECT Id FROM tipos_evento WHERE Designacao=:d LIMIT 1');
+            $type->execute(['d'=>'Admissão']);
+            $tipoAdmissao=$type->fetchColumn();
+            if ($tipoAdmissao===false) throw new \RuntimeException('O tipo de evento "Admissão" não está configurado.');
+            $event=$this->db->prepare('INSERT INTO eventos_associados (IdAssociado,Descricao,DataEvento,IdTipoEvento) VALUES (:a,:d,:dt,:t)');
+            $event->execute(['a'=>$associateId,'d'=>'Admissão do associado.','dt'=>$inscricao,'t'=>(int)$tipoAdmissao]);
             $this->db->commit();
             return $associateId;
         } catch (\Throwable $e) {
@@ -210,7 +228,7 @@ final class Associado
                 'Nome' => trim($data['Nome']),
                 'DNasc' => $data['DNasc'],
                 'IdGenero' => (int)$data['IdGenero'],
-                'CartaoCidadao' => trim($data['CartaoCidadao']),
+                'CartaoCidadao' => $this->normaliseCartaoCidadao((string)$data['CartaoCidadao']),
                 'NIF' => trim($data['NIF']),
                 'IdNacionalidade' => (int)$data['IdNacionalidade'],
                 'Naturalidade' => trim($data['Naturalidade']),

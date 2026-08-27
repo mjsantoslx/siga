@@ -150,7 +150,7 @@ A versão 9.0 normaliza a aplicação e a base de dados para UTF-8 / `utf8mb4`.
 - Correcção: a listagem de associados inclui explicitamente o campo `Numero`.
 
 
-**Versão:** 13.1
+**Versão:** 13.3
 
 ## Revisão 10.1
 
@@ -295,3 +295,17 @@ na listagem sem o erro `Undefined array key "Numero"`.
 - O ficheiro canónico encontra-se em `config/config.php`, conforme esperado pelo `public/index.php`.
 - O conteúdo do `config.php` foi restaurado a partir do ficheiro de configuração canónico.
 - Não existem alterações ao modelo de dados.
+
+## Versão 13.2
+
+- A criação de um associado gera automaticamente o evento **Admissão**.
+- A data de inscrição é sugerida com a data actual e pode ser alterada para uma data anterior, nunca futura.
+- A data de inscrição é gravada em `associados.DataRegisto` e usada como `DataEvento` da Admissão.
+- Associado, relações iniciais e evento de Admissão são criados numa única transacção.
+
+## Versão 13.3
+
+- O número do Cartão de Cidadão passa a aceitar apenas algarismos.
+- O número é normalizado para 8 dígitos, preenchendo com zeros à esquerda quando necessário.
+- A validação é feita tanto no formulário como no servidor.
+- Não existem alterações ao schema da base de dados.

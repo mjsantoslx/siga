@@ -1,4 +1,4 @@
--- SIGA v13.1 - Criação da base de dados de raiz
+-- SIGA v13.3 - Criação da base de dados de raiz
 
 -- SIGA v6 - Criação da base de dados de raiz
 
@@ -92,6 +92,8 @@ CREATE TABLE `tipos_evento`  (
   PRIMARY KEY (`Id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
+INSERT INTO `tipos_evento` (`Designacao`) VALUES ('Admissão');
+
 
 -- ----------------------------
 -- Table structure for tipos_parentesco
@@ -121,7 +123,7 @@ CREATE TABLE `utilizadores`  (
 
 
 
--- SIGA v13.1 - Criação da base de dados de raiz
+-- SIGA v13.3 - Criação da base de dados de raiz
 
 -- ----------------------------
 -- Table structure for associados
