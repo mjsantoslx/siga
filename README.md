@@ -309,3 +309,17 @@ na listagem sem o erro `Undefined array key "Numero"`.
 - O número é normalizado para 8 dígitos, preenchendo com zeros à esquerda quando necessário.
 - A validação é feita tanto no formulário como no servidor.
 - Não existem alterações ao schema da base de dados.
+
+## V14.1
+Adaptação inicial dos formulários de associados ao modelo de dados V14:
+- entidade `pessoas` para o nome;
+- novos dados pessoais e administrativos do associado;
+- género M/F;
+- Cartão de Utente com 9 algarismos;
+- Estado civil, Confissão religiosa e Tipo de documento;
+- Nome do pai e da mãe;
+- Nacionalidade Portuguesa priorizada no formulário;
+- criação de associado com pessoa + associado + secção + companhia opcional;
+- evento de Admissão criado quando o tipo correspondente existe.
+
+O ficheiro `config/config.php` foi preservado da V13.3.

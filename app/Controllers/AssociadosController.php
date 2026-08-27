@@ -30,18 +30,11 @@ final class AssociadosController extends Controller
     private function formData(): array
     {
         $db = Database::connection($this->config);
-        $generos = $db->query('SELECT Id, Designacao FROM generos ORDER BY Designacao')->fetchAll();
-        $nacionalidades = $db->query(
-            "SELECT Id, Nacionalidade
-             FROM nacionalidades
-             ORDER BY
-                 CASE WHEN Nacionalidade = 'Portuguesa' THEN 0 ELSE 1 END,
-                 Nacionalidade"
-        )->fetchAll();
-
         return [
-            'generos' => $generos,
-            'nacionalidades' => $nacionalidades,
+            'nacionalidades' => $db->query("SELECT Id,Nacionalidade FROM nacionalidades ORDER BY CASE WHEN Nacionalidade='Portuguesa' THEN 0 ELSE 1 END, Nacionalidade")->fetchAll(),
+            'estadosCivis' => $db->query('SELECT Id,Designacao FROM estados_civis ORDER BY Designacao')->fetchAll(),
+            'confissoesReligiosas' => $db->query('SELECT Id,Designacao FROM confissoes_religiosas ORDER BY Designacao')->fetchAll(),
+            'tiposDocumento' => $db->query('SELECT Id,Designacao FROM tipos_documento_identificacao ORDER BY Designacao')->fetchAll(),
             'companhias' => $this->companyModel()->accessibleForUser(Auth::id()),
             'seccoes' => $this->model()->sections(),
         ];
@@ -91,8 +84,8 @@ final class AssociadosController extends Controller
         $sectionId = (int)($_POST['IdSeccao'] ?? 0);
 
         // Normaliza dd/mm/aaaa para YYYY-MM-DD.
-        if (!empty($_POST['DNasc']) && preg_match('/^(\\d{2})\\/(\\d{2})\\/(\\d{4})$/', $_POST['DNasc'], $m)) {
-            $_POST['DNasc'] = $m[3] . '-' . $m[2] . '-' . $m[1];
+        if (!empty($_POST['DataNascimento']) && preg_match('/^(\\d{2})\\/(\\d{2})\\/(\\d{4})$/', $_POST['DataNascimento'], $m)) {
+            $_POST['DataNascimento'] = $m[3] . '-' . $m[2] . '-' . $m[1];
         }
 
         if (!empty($_POST['DataInscricao']) && preg_match('/^(\d{2})\/(\d{2})\/(\d{4})$/', $_POST['DataInscricao'], $m)) {
@@ -140,8 +133,8 @@ final class AssociadosController extends Controller
         }
 
         // Normaliza dd/mm/aaaa para YYYY-MM-DD também na edição.
-        if (!empty($_POST['DNasc']) && preg_match('/^(\\d{2})\\/(\\d{2})\\/(\\d{4})$/', $_POST['DNasc'], $m)) {
-            $_POST['DNasc'] = $m[3] . '-' . $m[2] . '-' . $m[1];
+        if (!empty($_POST['DataNascimento']) && preg_match('/^(\\d{2})\\/(\\d{2})\\/(\\d{4})$/', $_POST['DataNascimento'], $m)) {
+            $_POST['DataNascimento'] = $m[3] . '-' . $m[2] . '-' . $m[1];
         }
 
         try {
@@ -176,24 +169,14 @@ final class AssociadosController extends Controller
     public function show(int $id): void
     {
         $this->requireLogin();
-        $model = $this->model();
-        $associate = $model->findForUser(Auth::id(), $id);
-
-        if (!$associate) {
-            http_response_code(403);
-            exit('403 - Acesso não autorizado');
-        }
-
+        $model=$this->model();
+        $associate=$model->findForUser(Auth::id(),$id);
+        if(!$associate){ http_response_code(403); exit('403 - Acesso não autorizado'); }
         $this->view('associados/show', [
-            'associate' => $associate,
-            'health' => $model->healthForUser(Auth::id(), $id),
-            'section' => $model->currentSection($id),
-            'sectionHistory' => $model->sectionHistory(Auth::id(), $id),
-            'address' => $model->currentAddress($id),
-            'addressHistory' => $model->addressHistory(Auth::id(), $id),
-            'healthHistory' => $model->healthHistory(Auth::id(), $id),
-            'events' => $model->eventsForUser(Auth::id(), $id),
-            'csrf' => Csrf::token(),
+            'associate'=>$associate,
+            'section'=>$model->currentSection($id),
+            'sectionHistory'=>$model->sectionHistory(Auth::id(),$id),
+            'csrf'=>Csrf::token(),
         ]);
     }
 
