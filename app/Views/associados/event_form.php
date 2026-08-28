@@ -32,4 +32,12 @@ require dirname(__DIR__) . '/layouts/header.php';
 <a class="button secondary" href="<?= e($config['app']['base_url']) ?>/associados/<?= (int)$associate['Id'] ?>">Cancelar</a>
 </p>
 </form>
+<script>
+(function () {
+  const form=document.querySelector('form'); const input=form.querySelector('[name="DataEvento"]');
+  function validDate(v){const m=/^(\d{2})\/(\d{2})\/(\d{4})$/.exec(v);if(!m)return false;const d=new Date(+m[3],+m[2]-1,+m[1]);const t=new Date();t.setHours(23,59,59,999);return d.getFullYear()===+m[3]&&d.getMonth()===+m[2]-1&&d.getDate()===+m[1]&&d<=t;}
+  input.addEventListener('blur',()=>input.setCustomValidity(input.value&&!validDate(input.value)?'Introduza uma data válida no formato dd/mm/aaaa, não posterior a hoje.':''));
+  form.addEventListener('submit',e=>{if(!validDate(input.value)){input.setCustomValidity('Introduza uma data válida no formato dd/mm/aaaa, não posterior a hoje.');input.reportValidity();e.preventDefault();}});
+})();
+</script>
 <?php require dirname(__DIR__) . '/layouts/footer.php'; ?>

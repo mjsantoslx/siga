@@ -18,6 +18,6 @@
 </form>
 <h2>Histórico de moradas</h2>
 <table><thead><tr><th>Morada</th><th>Localidade</th><th>Código Postal</th><th>Início</th><th>Fim</th><th>Estado</th></tr></thead><tbody>
-<?php foreach($addressHistory as $a): ?><tr><td><?= e($a['Morada']) ?></td><td><?= e($a['Localidade']) ?></td><td><?= e($a['CodPostal']) ?></td><td><?= e($a['DataInicio']) ?></td><td><?= e($a['DataFim']??'') ?></td><td><?= (int)$a['Activo']?'Actual':'Histórica' ?></td></tr><?php endforeach; ?>
+<?php foreach($addressHistory as $a): ?><tr><td><?= e($a['Morada']) ?></td><td><?= e($a['Localidade']) ?></td><td><?= e($a['CodPostal']) ?></td><td><?= e(date('d/m/Y',strtotime($a['DataInicio']))) ?></td><td><?= e(!empty($a['DataFim']) ? date('d/m/Y',strtotime($a['DataFim'])) : '') ?></td><td><?= (int)$a['Activo']?'Actual':'Histórica' ?></td></tr><?php endforeach; ?>
 </tbody></table>
 <?php require dirname(__DIR__).'/layouts/footer.php'; ?>

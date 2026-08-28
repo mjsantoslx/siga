@@ -8,8 +8,8 @@ function selected($current,$id){return (string)$current===(string)$id?'selected'
 <?php if($error): ?><div class="alert"><?= e($error) ?></div><?php endif; ?>
 <form method="post" action="<?= e($action) ?>"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
 <label>Nome</label><input name="Nome" value="<?= e($associate['Nome']??'') ?>" required>
-<?php if(!$associate): ?><label>Data de inscrição</label><input type="date" name="DataInscricao" max="<?= date('Y-m-d') ?>" value="<?= e($_POST['DataInscricao']??date('Y-m-d')) ?>" required><?php endif; ?>
-<label>Data de nascimento</label><input type="date" name="DataNascimento" value="<?= e($associate['DataNascimento']??'') ?>" max="<?= date('Y-m-d') ?>" required>
+<?php if(!$associate): ?><label>Data de inscrição</label><input type="text" name="DataInscricao" placeholder="dd/mm/aaaa" maxlength="10" value="<?= e($_POST['DataInscricao']??date('d/m/Y')) ?>" required><?php endif; ?>
+<label>Data de nascimento</label><input type="text" name="DataNascimento" placeholder="dd/mm/aaaa" maxlength="10" value="<?= e($associate ? date('d/m/Y', strtotime($associate['DataNascimento'])) : ($_POST['DataNascimento']??'')) ?>" required>
 <label>Género</label><select name="Genero" required><option value="">-- Seleccionar --</option><option value="M" <?= selected($associate['Genero']??($_POST['Genero']??''),'M') ?>>Masculino</option><option value="F" <?= selected($associate['Genero']??($_POST['Genero']??''),'F') ?>>Feminino</option><option value="O" <?= selected($associate['Genero']??($_POST['Genero']??''),'O') ?>>Outro</option></select>
 <div id="nominativoOutroWrap"><label>Nominativo</label><input type="text" name="NominativoOutro" maxlength="100" value="<?= e($associate['NominativoOutro']??($_POST['NominativoOutro']??'')) ?>"><small>Obrigatório quando o género é Outro.</small></div><script>(function(){const g=document.querySelector('[name="Genero"]'),w=document.getElementById('nominativoOutroWrap'),i=w.querySelector('[name="NominativoOutro"]');function t(){let o=g.value==='O';w.style.display=o?'block':'none';i.required=o;if(!o)i.value='';}g.addEventListener('change',t);t();})();</script>
 
@@ -24,5 +24,28 @@ function selected($current,$id){return (string)$current===(string)$id?'selected'
 <label>Nome da mãe</label><input name="NomeMae" value="<?= e($associate['NomeMae']??'') ?>">
 <?php if(!$associate): ?><label>Companhia</label><select name="IdCompanhia"><option value="">-- Sem companhia --</option><?php foreach($companies as $c): ?><option value="<?= (int)$c['Id'] ?>"><?= e($c['Designacao']??$c['Nome']??'') ?></option><?php endforeach; ?></select><?php endif; ?>
 <button type="submit">Guardar</button> <a class="button secondary" href="<?= e($config['app']['base_url']) ?>/associados">Cancelar</a>
+<script>
+(function () {
+  const form = document.querySelector('form');
+  const fields = form.querySelectorAll('input[name="DataInscricao"], input[name="DataNascimento"]');
+  function validDate(value) {
+    const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(value);
+    if (!m) return false;
+    const d = new Date(+m[3], +m[2] - 1, +m[1]);
+    return d.getFullYear() === +m[3] && d.getMonth() === +m[2] - 1 && d.getDate() === +m[1] && d <= new Date(new Date().setHours(23,59,59,999));
+  }
+  fields.forEach(function (input) {
+    input.addEventListener('blur', function () {
+      if (input.value && !validDate(input.value)) input.setCustomValidity('Introduza uma data válida no formato dd/mm/aaaa, não posterior a hoje.');
+      else input.setCustomValidity('');
+    });
+  });
+  form.addEventListener('submit', function (e) {
+    let ok = true;
+    fields.forEach(function (input) { if (input.value && !validDate(input.value)) { input.setCustomValidity('Introduza uma data válida no formato dd/mm/aaaa, não posterior a hoje.'); input.reportValidity(); ok = false; } });
+    if (!ok) e.preventDefault();
+  });
+})();
+</script>
 </form>
 <?php require dirname(__DIR__).'/layouts/footer.php'; ?>

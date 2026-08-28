@@ -21,8 +21,8 @@
 <?php foreach ($companies as $c): ?>
 <tr>
 <td><?= e($c['Designacao']) ?></td>
-<td><?= e($c['DataInicio']) ?></td>
-<td><?= e($c['DataFim'] ?? '') ?></td>
+<td><?= e(date('d/m/Y',strtotime($c['DataInicio']))) ?></td>
+<td><?= e(!empty($c['DataFim']) ? date('d/m/Y',strtotime($c['DataFim'])) : '') ?></td>
 <td><?= (int)$c['Activo'] ? 'Activa' : 'Histórica' ?></td>
 <td>
 <?php if ((int)$c['Activo'] && !$c['DataFim']): ?>
