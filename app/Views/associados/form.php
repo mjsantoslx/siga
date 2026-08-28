@@ -48,6 +48,35 @@ function selected($current,$id){return (string)$current===(string)$id?'selected'
 })();
 </script>
 </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const type = document.querySelector('[name="IdTipoDocumentoIdentificacao"]');
+    const number = document.querySelector('[name="NumeroDocumentoIdentificacao"]');
+
+    function isCcOrBi() {
+        if (!type || !type.options[type.selectedIndex]) return false;
+        const label = type.options[type.selectedIndex].text.trim();
+        return label === 'Cartão de Cidadão' || label === 'Bilhete de Identidade';
+    }
+
+    function normalise() {
+        if (!number || !isCcOrBi()) return;
+        const digits = number.value.replace(/\D/g, '');
+        if (digits.length > 0 && digits.length <= 8) {
+            number.value = digits.padStart(8, '0');
+        }
+    }
+
+    if (number) {
+        number.addEventListener('blur', normalise);
+    }
+    if (type) {
+        type.addEventListener('change', normalise);
+    }
+});
+</script>
+
 <?php require dirname(__DIR__).'/layouts/footer.php'; ?>
 
 <script src="/assets/js/date-mask.js"></script>

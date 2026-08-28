@@ -75,6 +75,39 @@ final class Associado
     private function nullableInt(mixed $v): ?int { $v=(int)$v; return $v>0?$v:null; }
     private function nullstr(mixed $v): ?string { $v=trim((string)$v); return $v===''?null:$v; }
 
+    /**
+     * Para Cartão de Cidadão e Bilhete de Identidade, o número é tratado como
+     * texto numérico de 8 algarismos. Valores mais curtos são completados
+     * automaticamente com zeros à esquerda.
+     */
+    private function normaliseDocumentNumber(array $d): ?string
+    {
+        $number = $this->nullstr($d['NumeroDocumentoIdentificacao'] ?? null);
+        $typeId = $this->nullableInt($d['IdTipoDocumentoIdentificacao'] ?? null);
+
+        if ($number === null || $typeId === null) {
+            return $number;
+        }
+
+        $st = $this->db->prepare(
+            'SELECT Designacao FROM tipos_documento_identificacao WHERE Id = :id'
+        );
+        $st->execute(['id' => $typeId]);
+        $type = trim((string)$st->fetchColumn());
+
+        if (in_array($type, ['Cartão de Cidadão', 'Bilhete de Identidade'], true)) {
+            if (!preg_match('/^\\d{1,8}$/', $number)) {
+                throw new \\RuntimeException(
+                    'O número do Cartão de Cidadão ou Bilhete de Identidade deve ter entre 1 e 8 algarismos.'
+                );
+            }
+
+            return str_pad($number, 8, '0', STR_PAD_LEFT);
+        }
+
+        return $number;
+    }
+
     private function validate(array $d): void
     {
         if(trim((string)($d['Nome']??''))==='') throw new \RuntimeException('O nome é obrigatório.');
@@ -97,7 +130,7 @@ final class Associado
             $st=$this->db->prepare('INSERT INTO pessoas (Nome) VALUES (:n)'); $st->execute(['n'=>trim($d['Nome'])]);
             $pid=(int)$this->db->lastInsertId();
             $st=$this->db->prepare('INSERT INTO associados (IdPessoa,NumeroAssociado,DataNascimento,Genero,IdNacionalidade,IdEstadoCivil,IdConfissaoReligiosa,IdTipoDocumentoIdentificacao,NumeroDocumentoIdentificacao,NumeroCartaoUtente,NominativoOutro,NomePai,NomeMae,DataInscricao,Activo) VALUES (:p,:num,:dn,:g,:nat,:ec,:cr,:td,:ndi,:cu,:no,:pai,:mae,:di,1)');
-            $st->execute(['p'=>$pid,'num'=>$numero,'dn'=>$d['DataNascimento'],'g'=>$d['Genero'],'nat'=>$this->nullableInt($d['IdNacionalidade']??null),'ec'=>$this->nullableInt($d['IdEstadoCivil']??null),'cr'=>$this->nullableInt($d['IdConfissaoReligiosa']??null),'td'=>$this->nullableInt($d['IdTipoDocumentoIdentificacao']??null),'ndi'=>$this->nullstr($d['NumeroDocumentoIdentificacao']??null),'cu'=>$this->nullstr($d['NumeroCartaoUtente']??null),'no'=>($d['Genero']==='O'?$this->nullstr($d['NominativoOutro']??null):null),'pai'=>$this->nullstr($d['NomePai']??null),'mae'=>$this->nullstr($d['NomeMae']??null),'di'=>$ins]);
+            $st->execute(['p'=>$pid,'num'=>$numero,'dn'=>$d['DataNascimento'],'g'=>$d['Genero'],'nat'=>$this->nullableInt($d['IdNacionalidade']??null),'ec'=>$this->nullableInt($d['IdEstadoCivil']??null),'cr'=>$this->nullableInt($d['IdConfissaoReligiosa']??null),'td'=>$this->nullableInt($d['IdTipoDocumentoIdentificacao']??null),'ndi'=>$this->normaliseDocumentNumber($d),'cu'=>$this->nullstr($d['NumeroCartaoUtente']??null),'no'=>($d['Genero']==='O'?$this->nullstr($d['NominativoOutro']??null):null),'pai'=>$this->nullstr($d['NomePai']??null),'mae'=>$this->nullstr($d['NomeMae']??null),'di'=>$ins]);
             $id=(int)$this->db->lastInsertId();
             if($companyId>0){$x=$this->db->prepare('INSERT INTO associados_companhias (IdAssociado,IdCompanhia,DataInicio,DataFim,Activo) VALUES (:a,:c,:d,NULL,1)');$x->execute(['a'=>$id,'c'=>$companyId,'d'=>$ins]);}
             $x=$this->db->prepare('INSERT INTO associados_secoes (IdAssociado,IdSecao,DataInicio,DataFim,Activo) VALUES (:a,:s,:d,NULL,1)');$x->execute(['a'=>$id,'s'=>$sectionId,'d'=>$ins]);
@@ -131,7 +164,7 @@ final class Associado
         try {
             $this->db->prepare('UPDATE pessoas SET Nome=:n WHERE Id=:id')->execute(['n'=>trim($d['Nome']),'id'=>$a['IdPessoa']]);
             $st=$this->db->prepare('UPDATE associados SET DataNascimento=:dn,Genero=:g,IdNacionalidade=:nat,IdEstadoCivil=:ec,IdConfissaoReligiosa=:cr,IdTipoDocumentoIdentificacao=:td,NumeroDocumentoIdentificacao=:ndi,NumeroCartaoUtente=:cu,NominativoOutro=:no,NomePai=:pai,NomeMae=:mae WHERE Id=:id');
-            $st->execute(['dn'=>$d['DataNascimento'],'g'=>$d['Genero'],'nat'=>$this->nullableInt($d['IdNacionalidade']??null),'ec'=>$this->nullableInt($d['IdEstadoCivil']??null),'cr'=>$this->nullableInt($d['IdConfissaoReligiosa']??null),'td'=>$this->nullableInt($d['IdTipoDocumentoIdentificacao']??null),'ndi'=>$this->nullstr($d['NumeroDocumentoIdentificacao']??null),'cu'=>$this->nullstr($d['NumeroCartaoUtente']??null),'no'=>($d['Genero']==='O'?$this->nullstr($d['NominativoOutro']??null):null),'pai'=>$this->nullstr($d['NomePai']??null),'mae'=>$this->nullstr($d['NomeMae']??null),'id'=>$id]);
+            $st->execute(['dn'=>$d['DataNascimento'],'g'=>$d['Genero'],'nat'=>$this->nullableInt($d['IdNacionalidade']??null),'ec'=>$this->nullableInt($d['IdEstadoCivil']??null),'cr'=>$this->nullableInt($d['IdConfissaoReligiosa']??null),'td'=>$this->nullableInt($d['IdTipoDocumentoIdentificacao']??null),'ndi'=>$this->normaliseDocumentNumber($d),'cu'=>$this->nullstr($d['NumeroCartaoUtente']??null),'no'=>($d['Genero']==='O'?$this->nullstr($d['NominativoOutro']??null):null),'pai'=>$this->nullstr($d['NomePai']??null),'mae'=>$this->nullstr($d['NomeMae']??null),'id'=>$id]);
             $cur=$this->currentSection($id);
             if(!$cur || (int)$cur['Id']!==$sectionId){
                 $check=$this->db->prepare('SELECT Id FROM secoes WHERE Id=:id');$check->execute(['id'=>$sectionId]); if(!$check->fetch()) throw new \RuntimeException('Secção inválida.');

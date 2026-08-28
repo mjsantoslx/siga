@@ -1,15 +1,15 @@
-# Validação do pacote SIGA V15.0 consolidado
+# Inventário do pacote SIGA V15.0
 
-## Validações executadas
+Este pacote foi consolidado a partir da versão V15.0 mais recente disponível no ambiente,
+já contendo a correção para zeros à esquerda em Cartão de Cidadão e Bilhete de Identidade.
 
-- Validação sintáctica (`php -l`) de todos os ficheiros PHP do pacote.
-- Remoção de tags HTML/JavaScript que tinham sido indevidamente inseridas em ficheiros de modelo e controlador.
-- Correcção dos campos de data dos formulários de associados e eventos.
-- Confirmação de que a máscara de datas está no ficheiro `public/assets/js/date-mask.js`.
-- Verificação estática das referências SQL mais comuns no código contra as tabelas criadas no script SQL.
-- Confirmação de que existe apenas um ficheiro SQL no pacote.
-- Confirmação de que não existem scripts de migração.
+## Estrutura verificada
+- Ficheiros PHP no pacote: 38
+- Ficheiros SQL no pacote: 1
+- Script SQL de criação esperado:
+  `database/SIGA_V15.0_Criacao_BD.sql`
+- Scripts de migração no pacote V15.0: não aplicáveis
 
-## Limitação
-
-A execução integral do script contra o servidor MariaDB do ambiente WAMP não pode ser reproduzida neste ambiente. A validação SQL é estrutural/estática; o primeiro teste de instalação deverá executar o script no MariaDB alvo.
+## Nota
+A execução integral do SQL contra o MariaDB/WAMP do utilizador não é possível neste ambiente.
+Por isso, este documento não declara testes de execução que não tenham sido realizados.
