@@ -11,7 +11,7 @@ require dirname(__DIR__) . '/layouts/header.php';
 
 <label>Data do evento</label>
 <input type="text" name="DataEvento" placeholder="dd/mm/aaaa" maxlength="10"
-       value="<?= e($event ? date('d/m/Y', strtotime($event['DataEvento'])) : ($_POST['DataEvento'] ?? date('d/m/Y'))) ? data-date-format="eu">"
+       value="<?= e($event ? date('d/m/Y', strtotime($event['DataEvento'])) : ($_POST['DataEvento'] ?? date('d/m/Y'))) ?>" data-date-format="eu"
        required>
 
 <label>Tipo de evento</label>

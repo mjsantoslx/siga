@@ -257,4 +257,3 @@ final class Associado
     }
 }
 
-<script src="/assets/js/date-mask.js"></script>
