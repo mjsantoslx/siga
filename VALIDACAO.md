@@ -1,4 +1,4 @@
-# Validação do pacote SIGA V14.1 consolidado
+# Validação do pacote SIGA V15.0 consolidado
 
 ## Validações executadas
 

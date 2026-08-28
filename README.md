@@ -1,4 +1,4 @@
-# SIGA V14.1 — Datas europeias com máscara
+# SIGA V15.0 — Datas europeias com máscara
 
 Correcção aplicada:
 - Os campos DataNascimento, DataInscricao e DataEvento aceitam apenas algarismos durante a introdução.
@@ -9,14 +9,14 @@ Correcção aplicada:
 Exemplo:
 01011969 -> 01/01/1969
 
-SIGA V14.1
+SIGA V15.0
 
 Pacote de instalação para uma BASE DE DADOS NOVA.
 
 Conteúdo:
-- Código completo da aplicação SIGA V14.1
+- Código completo da aplicação SIGA V15.0
 - config/config.php
-- database/SIGA_V14.1_Criacao_BD.sql
+- database/SIGA_V15.0_Criacao_BD.sql
 
 IMPORTANTE:
 Esta versão pressupõe uma instalação limpa. Não contém scripts de migração,
@@ -27,7 +27,7 @@ O script de criação recria integralmente a base de dados SIGA.
 
 ---
 
-# SIGA V14.1
+# SIGA V15.0
 
 Versão adaptada ao modelo de dados V14.
 
@@ -358,7 +358,7 @@ na listagem sem o erro `Undefined array key "Numero"`.
 - A validação é feita tanto no formulário como no servidor.
 - Não existem alterações ao schema da base de dados.
 
-## V14.1
+## V15.0
 Adaptação inicial dos formulários de associados ao modelo de dados V14:
 - entidade `pessoas` para o nome;
 - novos dados pessoais e administrativos do associado;
@@ -375,4 +375,9 @@ O ficheiro `config/config.php` foi preservado da V13.3.
 
 ## Dados iniciais da base de dados
 
-O script `database/SIGA_V14.1_Criacao_BD.sql` cria a base de dados de raiz e inclui dados iniciais para as tabelas de referência necessárias à aplicação, incluindo uma lista internacional de nacionalidades. Não existem scripts de migração neste pacote.
+O script `database/SIGA_V15.0_Criacao_BD.sql` cria a base de dados de raiz e inclui dados iniciais para as tabelas de referência necessárias à aplicação, incluindo uma lista internacional de nacionalidades. Não existem scripts de migração neste pacote.
+
+---
+
+## Linha de versões V15.x
+Esta distribuição foi consolidada como **SIGA V15.0**. Consulte `ESPECIFICACAO_CONSOLIDADA_V15.0.md` e `POLITICA_VERSIONAMENTO.md` antes de efectuar alterações estruturais ou funcionais.
