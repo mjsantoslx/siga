@@ -352,3 +352,5 @@ final class AssociadosController extends Controller
         ]);
     }
 }
+
+<script src="/assets/js/date-mask.js"></script>

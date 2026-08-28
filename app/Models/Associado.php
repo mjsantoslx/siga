@@ -256,3 +256,5 @@ final class Associado
         if(!$this->authorization->canAccessAssociate($userId,$associateId))return [];$s=$this->db->prepare('SELECT h.*,u.Nome AS Utilizador FROM fichas_saude_historico h INNER JOIN utilizadores u ON u.Id=h.IdUtilizador WHERE h.IdAssociado=:id ORDER BY h.DataHora DESC,h.Id DESC');$s->execute(['id'=>$associateId]);return $s->fetchAll();
     }
 }
+
+<script src="/assets/js/date-mask.js"></script>

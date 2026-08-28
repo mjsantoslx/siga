@@ -1,3 +1,14 @@
+# SIGA V14.1 — Datas europeias com máscara
+
+Correcção aplicada:
+- Os campos DataNascimento, DataInscricao e DataEvento aceitam apenas algarismos durante a introdução.
+- As barras são inseridas automaticamente no formato dd/mm/aaaa.
+- A base de dados continua a armazenar datas em YYYY-MM-DD.
+- A validação de datas continua a ser feita no servidor.
+
+Exemplo:
+01011969 -> 01/01/1969
+
 SIGA V14.1
 
 Pacote de instalação para uma BASE DE DADOS NOVA.

@@ -24,3 +24,5 @@
 <?php foreach($events as $event): ?><tr><td><?= e(date('d/m/Y',strtotime($event['DataEvento']))) ?></td><td><?= e($event['TipoEvento']) ?></td><td><?= e($event['Observacoes']??'') ?></td><td><a href="<?= e($config['app']['base_url']) ?>/associados/<?= (int)$associate['Id'] ?>/eventos/<?= (int)$event['Id'] ?>/editar">Editar</a></td></tr><?php endforeach; ?>
 </tbody></table>
 <?php require dirname(__DIR__).'/layouts/footer.php'; ?>
+
+<script src="/assets/js/date-mask.js"></script>
